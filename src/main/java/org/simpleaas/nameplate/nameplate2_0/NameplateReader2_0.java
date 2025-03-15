@@ -1,9 +1,10 @@
 package org.simpleaas.nameplate.nameplate2_0;
 
-import org.eclipse.digitaltwin.aas4j.v3.model.Key;
-import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
-import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
+import org.eclipse.digitaltwin.aas4j.v3.model.*;
+import org.simpleaas.exception.SubmodelElementNotFoundException;
+import org.simpleaas.nameplate.NameplateConstants;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +15,36 @@ public class NameplateReader2_0 {
         this.nameplateSubmodel = submodel;
     }
 
-    public String getUriOfTheProduct() {
+    public String getUriOfTheProduct() throws SubmodelElementNotFoundException {
+        Optional<SubmodelElement> optUri = getSubmodelElement(NameplateConstants.Nameplate2_0.uriOfTheProduct, this.nameplateSubmodel.getSubmodelElements());
 
+        if(optUri.isPresent()) {
+            SubmodelElement element = optUri.get();
+
+            if(element instanceof Property p) {
+                return p.getValue();
+            } else {
+                throw new SubmodelElementNotFoundException("Submodel element with semantic identifier of URI of the product is from unexpected type " + element.getClass().getName() + ".");
+            }
+        } else {
+            throw new SubmodelElementNotFoundException("Unable to find submodel element with semantic identifier of URI of the product in the submodel.");
+        }
+    }
+
+    public HashMap<String, String> getManufacturerName() throws SubmodelElementNotFoundException {
+        Optional<SubmodelElement> optManuName = getSubmodelElement(NameplateConstants.Nameplate2_0.manufacturerName, this.nameplateSubmodel.getSubmodelElements());
+
+        if(optManuName.isPresent()) {
+            SubmodelElement element = optManuName.get();
+
+            if(element instanceof MultiLanguageProperty mlp) {
+                return convertMlpToHashmap(mlp.getValue());
+            } else {
+                throw new SubmodelElementNotFoundException("Submodel element with semantic identifier of manufacturer name is from unexpected type " + element.getClass().getName() + ".");
+            }
+        } else {
+            throw new SubmodelElementNotFoundException("Unable to find submodel element with semantic identifier of manufacturer name in the submodel.");
+        }
     }
 
     private Optional<SubmodelElement> getSubmodelElement(String semanticId, List<SubmodelElement> submodelElements) {
@@ -32,5 +61,13 @@ public class NameplateReader2_0 {
         }
 
         return Optional.empty();
+    }
+
+    private HashMap<String, String> convertMlpToHashmap(List<LangStringTextType> mlpValue) {
+        HashMap<String, String> values = new HashMap<>();
+
+        mlpValue.forEach(s -> values.put(s.getLanguage(), s.getText()));
+
+        return values;
     }
 }
