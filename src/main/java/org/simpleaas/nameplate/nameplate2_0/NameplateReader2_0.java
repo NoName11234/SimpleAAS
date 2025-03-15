@@ -47,6 +47,70 @@ public class NameplateReader2_0 {
         }
     }
 
+    public HashMap<String, String> getManufacturerProductDesignation() throws SubmodelElementNotFoundException {
+        Optional<SubmodelElement> optProductDes = getSubmodelElement(NameplateConstants.Nameplate2_0.manufacturerProductDesignation, this.nameplateSubmodel.getSubmodelElements());
+
+        if(optProductDes.isPresent()) {
+            SubmodelElement element = optProductDes.get();
+
+            if(element instanceof MultiLanguageProperty mlp) {
+                return convertMlpToHashmap(mlp.getValue());
+            } else {
+                throw new SubmodelElementNotFoundException("Submodel element with semantic identifier of manufacturer product designation is from unexpected type " + element.getClass().getName() + ".");
+            }
+        } else {
+            throw new SubmodelElementNotFoundException("Unable to find submodel element with semantic identifier of manufacturer product designation in the submodel.");
+        }
+    }
+
+    public HashMap<String, String> getManufacturerProductRoot() throws SubmodelElementNotFoundException {
+        Optional<SubmodelElement> optProductRoot = getSubmodelElement(NameplateConstants.Nameplate2_0.manufacturerProductRoot, this.nameplateSubmodel.getSubmodelElements());
+
+        if(optProductRoot.isPresent()) {
+            SubmodelElement element = optProductRoot.get();
+
+            if(element instanceof MultiLanguageProperty mlp) {
+                return convertMlpToHashmap(mlp.getValue());
+            } else {
+                throw new SubmodelElementNotFoundException("Submodel element with semantic identifier of manufacturer product root is from unexpected type " + element.getClass().getName() + ".");
+            }
+        } else {
+            throw new SubmodelElementNotFoundException("Unable to find submodel element with semantic identifier of manufacturer product root in the submodel.");
+        }
+    }
+
+    public HashMap<String, String> getManufacturerProductFamily() throws SubmodelElementNotFoundException {
+        Optional<SubmodelElement> optProductFamily = getSubmodelElement(NameplateConstants.Nameplate2_0.manufacturerProductFamily, this.nameplateSubmodel.getSubmodelElements());
+
+        if(optProductFamily.isPresent()) {
+            SubmodelElement element = optProductFamily.get();
+
+            if(element instanceof MultiLanguageProperty mlp) {
+                return convertMlpToHashmap(mlp.getValue());
+            } else {
+                throw new SubmodelElementNotFoundException("Submodel element with semantic identifier of manufacturer product family is from unexpected type " + element.getClass().getName() + ".");
+            }
+        } else {
+            throw new SubmodelElementNotFoundException("Unable to find submodel element with semantic identifier of manufacturer product family in the submodel.");
+        }
+    }
+
+    public HashMap<String, String> getManufacturerProductType() throws SubmodelElementNotFoundException {
+        Optional<SubmodelElement> optProductType = getSubmodelElement(NameplateConstants.Nameplate2_0.manufacturerProductType, this.nameplateSubmodel.getSubmodelElements());
+
+        if(optProductType.isPresent()) {
+            SubmodelElement element = optProductType.get();
+
+            if(element instanceof MultiLanguageProperty mlp) {
+                return convertMlpToHashmap(mlp.getValue());
+            } else {
+                throw new SubmodelElementNotFoundException("Submodel element with semantic identifier of manufacturer product type is from unexpected type " + element.getClass().getName() + ".");
+            }
+        } else {
+            throw new SubmodelElementNotFoundException("Unable to find submodel element with semantic identifier of manufacturer product type in the submodel.");
+        }
+    }
+
     private Optional<SubmodelElement> getSubmodelElement(String semanticId, List<SubmodelElement> submodelElements) {
         for (SubmodelElement element: submodelElements) {
             List<Key> semanticKeys = element.getSemanticId().getKeys();
