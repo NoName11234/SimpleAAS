@@ -20,14 +20,6 @@ public class NameplateConstants {
         public static String countryOfOrigin = "0173-1#02-AAO259#004";
         public static String companyLogo = "https://admin-shell.io/zvei/nameplate/2/0/Nameplate/CompanyLogo";
 
-        public static class ContactInformation {
-            public static String id = "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation";
-            public static String street = "0173-1#02-AAO128#002";
-            public static String zipcode = "0173-1#02-AAO129#002";
-            public static String cityTown = "0173-1#02-AAO132#002";
-            public static String nationalCode = "0173-1#02-AAO134#002";
-        }
-
         public static class Markings {
             public static String id = "0173-1#01-AGZ673#001";
 
