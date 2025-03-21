@@ -2,7 +2,7 @@ package org.simpleaas.nameplate;
 
 public class NameplateConstants {
     public static class Nameplate2_0 {
-        public static String id = "";
+        public static String id = "https://admin-shell.io/zvei/nameplate/2/0/Nameplate";
         public static String uriOfTheProduct = "0173-1#02-AAY811#001";
         public static String manufacturerName = "0173-1#02-AAO677#002";
         public static String manufacturerProductDesignation = "0173-1#02-AAW338#001";
