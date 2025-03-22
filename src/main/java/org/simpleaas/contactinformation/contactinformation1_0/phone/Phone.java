@@ -1,11 +1,11 @@
-package org.simpleaas.contactinformation.contactinformation1_0;
+package org.simpleaas.contactinformation.contactinformation1_0.phone;
 
 import java.util.HashMap;
 import java.util.Optional;
 
 public class Phone {
     private final HashMap<String, String> telephoneNumber = new HashMap<>();
-    private String typeOfTelephone = null;
+    private TypeOfTelephone typeOfTelephone = null;
     private HashMap<String, String> availableTime = new HashMap<>();
 
     public Phone(String language, String telephoneNumber) {
@@ -25,11 +25,11 @@ public class Phone {
         return this.telephoneNumber;
     }
 
-    public Optional<String> getTypeOfTelephone() {
+    public Optional<TypeOfTelephone> getTypeOfTelephone() {
         return Optional.ofNullable(this.typeOfTelephone);
     }
 
-    public Phone setTypeOfTelephone(String typeOfTelephone) {
+    public Phone setTypeOfTelephone(TypeOfTelephone typeOfTelephone) {
         this.typeOfTelephone = typeOfTelephone;
         return this;
     }
