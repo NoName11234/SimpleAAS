@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class NameplateReader2_0 {
-    private Submodel nameplateSubmodel;
+    private final Submodel nameplateSubmodel;
 
     public NameplateReader2_0(Submodel submodel) {
         this.nameplateSubmodel = submodel;
