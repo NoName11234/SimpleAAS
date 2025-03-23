@@ -7,7 +7,7 @@ public enum TypeOfFaxNumber {
 
     private final String type;
 
-    private TypeOfFaxNumber(String type) {
+    TypeOfFaxNumber(String type) {
         this.type = type;
     }
 

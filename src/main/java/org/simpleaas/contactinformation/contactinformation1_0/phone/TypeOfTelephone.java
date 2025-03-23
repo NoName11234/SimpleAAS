@@ -10,7 +10,7 @@ public enum TypeOfTelephone {
 
     private final String type;
 
-    private TypeOfTelephone(String type) {
+    TypeOfTelephone(String type) {
         this.type = type;
     }
 
