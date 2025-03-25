@@ -1,6 +1,7 @@
 package org.simpleaas.contactinformation.contactinformation1_0;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.*;
+import org.simpleaas.contactinformation.ContactInformationConstants;
 import org.simpleaas.contactinformation.contactinformation1_0.email.Email;
 import org.simpleaas.contactinformation.contactinformation1_0.fax.Fax;
 import org.simpleaas.contactinformation.contactinformation1_0.ipcommunication.IpCommunication;
@@ -23,10 +24,15 @@ public class ContactInformationReader1_0 {
 
     public List<ContactInformation> getContactInformation() {
 
+        return this.submodel.getSubmodelElements().stream()
+                .filter(se -> se instanceof SubmodelElementCollection)
+                .map(se -> ((SubmodelElementCollection)se))
+                .map(ContactInformationReader1_0::getContactInformation)
+                .toList();
     }
 
     private Phone convertSmcToPhone(SubmodelElementCollection smc) {
-
+        
     }
 
     private Fax convertSmcToFax(SubmodelElementCollection smc) {
@@ -41,7 +47,7 @@ public class ContactInformationReader1_0 {
         
     }
 
-    private List<SubmodelElement> getSubmodelElement(String semanticId, List<SubmodelElement> submodelElements) {
+    private List<SubmodelElement> getSubmodelElements(String semanticId, List<SubmodelElement> submodelElements) {
         List<SubmodelElement> foundSubmodelElements = new ArrayList<>();
 
         for (SubmodelElement element: submodelElements) {
