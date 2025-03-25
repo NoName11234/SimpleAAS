@@ -6,10 +6,12 @@ import org.simpleaas.contactinformation.contactinformation1_0.email.Email;
 import org.simpleaas.contactinformation.contactinformation1_0.fax.Fax;
 import org.simpleaas.contactinformation.contactinformation1_0.ipcommunication.IpCommunication;
 import org.simpleaas.contactinformation.contactinformation1_0.phone.Phone;
+import org.simpleaas.contactinformation.contactinformation1_0.phone.TypeOfTelephone;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class ContactInformationReader1_0 {
     private final Submodel submodel;
@@ -31,8 +33,29 @@ public class ContactInformationReader1_0 {
                 .toList();
     }
 
-    private Phone convertSmcToPhone(SubmodelElementCollection smc) {
-        
+    private Optional<Phone> convertSmcToPhone(SubmodelElementCollection smc) {
+        //get telephone number mlp
+        List<SubmodelElement> telephoneNumberSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.telephoneNumber, smc.getValue());
+
+        //telephone number is not optional
+        if(telephoneNumberSubmodelElements.isEmpty()){
+            return Optional.empty();
+        }
+
+        MultiLanguageProperty telephoneNumberMlp = (MultiLanguageProperty) telephoneNumberSubmodelElements.getFirst();
+        HashMap<String, String> telephoneNumber = convertMlpToHashmap(telephoneNumberMlp.getValue());
+
+        //get type of telephone
+        List<SubmodelElement> typeOfTelephoneSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.typeOfTelephone, smc.getValue());
+        Optional<TypeOfTelephone> optTypeOfTelephone = Optional.empty();
+
+        if(!typeOfTelephoneSubmodelElements.isEmpty()) {
+            Property typeOfTelephoneProperty = (Property) typeOfTelephoneSubmodelElements.getFirst();
+            optTypeOfTelephone = Optional.of(TypeOf)
+        }
+
+        //get available time
+
     }
 
     private Fax convertSmcToFax(SubmodelElementCollection smc) {

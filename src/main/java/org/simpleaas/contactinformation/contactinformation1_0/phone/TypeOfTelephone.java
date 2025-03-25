@@ -1,5 +1,7 @@
 package org.simpleaas.contactinformation.contactinformation1_0.phone;
 
+import java.util.Optional;
+
 public enum TypeOfTelephone {
     Office("0173-1#07-AAS754#001"),
     OfficeMobile("0173-1#07-AAS755#001"),
@@ -16,5 +18,18 @@ public enum TypeOfTelephone {
 
     public String getSemanticId() {
         return this.type;
+    }
+
+    public static Optional<TypeOfTelephone> createFromSemanticId(String semanticId) {
+
+        switch (semanticId) {
+            case "0173-1#07-AAS754#001" -> {
+                Optional.of(TypeOfTelephone.Office);
+            }
+            
+            default -> {
+                return Optional.empty();
+            }
+        }
     }
 }
