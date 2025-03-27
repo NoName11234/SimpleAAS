@@ -7,6 +7,7 @@ import org.simpleaas.contactinformation.contactinformation1_0.email.TypeOfEmailA
 import org.simpleaas.contactinformation.contactinformation1_0.fax.Fax;
 import org.simpleaas.contactinformation.contactinformation1_0.fax.TypeOfFaxNumber;
 import org.simpleaas.contactinformation.contactinformation1_0.ipcommunication.IpCommunication;
+import org.simpleaas.contactinformation.contactinformation1_0.ipcommunication.TypeOfCommunication;
 import org.simpleaas.contactinformation.contactinformation1_0.phone.Phone;
 import org.simpleaas.contactinformation.contactinformation1_0.phone.TypeOfTelephone;
 
@@ -62,7 +63,7 @@ public class ContactInformationReader1_0 {
 
         if(!availableTimeSubmodelElements.isEmpty()) {
             MultiLanguageProperty availableTimeMlp = (MultiLanguageProperty) availableTimeSubmodelElements.getFirst();
-            availableTime = convertMlpToHashmap(availableTimeMlp.getValue());
+            availableTime.putAll(convertMlpToHashmap(availableTimeMlp.getValue()));
         }
 
         //map collected values on phone object
@@ -128,7 +129,7 @@ public class ContactInformationReader1_0 {
 
         if(!publicKeySubmodelElements.isEmpty()) {
             MultiLanguageProperty publicKeyMlp = (MultiLanguageProperty) publicKeySubmodelElements.getFirst();
-            publicKey = convertMlpToHashmap(publicKeyMlp.getValue());
+            publicKey.putAll(convertMlpToHashmap(publicKeyMlp.getValue()));
         }
 
         //get type of email address property
@@ -146,7 +147,7 @@ public class ContactInformationReader1_0 {
 
         if(!typeOfPublicKeySubmodelElements.isEmpty()) {
             MultiLanguageProperty typeOfPublicKeyMlp = (MultiLanguageProperty) typeOfPublicKeySubmodelElements.getFirst();
-            typeOfPublicKey = convertMlpToHashmap(typeOfPublicKeyMlp.getValue());
+            typeOfPublicKey.putAll(convertMlpToHashmap(typeOfPublicKeyMlp.getValue()));
         }
 
         //map on email
@@ -161,8 +162,46 @@ public class ContactInformationReader1_0 {
         return Optional.of(email);
     }
 
-    private IpCommunication convertSmcToIpCommunication(SubmodelElementCollection smc) {
-        
+    private Optional<IpCommunication> convertSmcToIpCommunication(SubmodelElementCollection smc) {
+        //get address of additional link property
+        List<SubmodelElement> additionalAddressSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.addressOfAdditionalLink, smc.getValue());
+
+        //address of additional link is not optional
+        if(additionalAddressSubmodelElements.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Property additionalAddressProperty = (Property) additionalAddressSubmodelElements.getFirst();
+        String additionalAddress = additionalAddressProperty.getValue();
+
+        //get type of communication property
+        List<SubmodelElement> typeOfCommunicationSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.typeOfCommunication, smc.getValue());
+        Optional<TypeOfCommunication> optTypeOfCommunication = Optional.empty();
+
+        if(!typeOfCommunicationSubmodelElements.isEmpty()) {
+            Property typeOfCommunicationProperty = (Property) typeOfCommunicationSubmodelElements.getFirst();
+            optTypeOfCommunication = TypeOfCommunication.createFromValue(typeOfCommunicationProperty.getValue());
+        }
+
+        //get available time mlp
+        List<SubmodelElement> availableTimeSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.availableTime, smc.getValue());
+        HashMap<String, String> availableTime = new HashMap<>();
+
+        if(!availableTimeSubmodelElements.isEmpty()) {
+            MultiLanguageProperty availableTimeMlp = (MultiLanguageProperty) availableTimeSubmodelElements.getFirst();
+            availableTime.putAll(convertMlpToHashmap(availableTimeMlp.getValue()));
+        }
+
+        //map on ip communication
+        IpCommunication ipCommunication = new IpCommunication(additionalAddress);
+
+        if(optTypeOfCommunication.isPresent()) {
+            ipCommunication.setTypeOfCommunication(optTypeOfCommunication.get());
+        }
+
+        ipCommunication.setAvailableTime(availableTime);
+
+        return Optional.of(ipCommunication);
     }
 
     private List<SubmodelElement> getSubmodelElements(String semanticId, List<SubmodelElement> submodelElements) {
