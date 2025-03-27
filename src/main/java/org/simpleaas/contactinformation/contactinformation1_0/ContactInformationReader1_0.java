@@ -4,6 +4,7 @@ import org.eclipse.digitaltwin.aas4j.v3.model.*;
 import org.simpleaas.contactinformation.ContactInformationConstants;
 import org.simpleaas.contactinformation.contactinformation1_0.email.Email;
 import org.simpleaas.contactinformation.contactinformation1_0.fax.Fax;
+import org.simpleaas.contactinformation.contactinformation1_0.fax.TypeOfFaxNumber;
 import org.simpleaas.contactinformation.contactinformation1_0.ipcommunication.IpCommunication;
 import org.simpleaas.contactinformation.contactinformation1_0.phone.Phone;
 import org.simpleaas.contactinformation.contactinformation1_0.phone.TypeOfTelephone;
@@ -77,8 +78,35 @@ public class ContactInformationReader1_0 {
         return Optional.of(phone);
     }
 
-    private Fax convertSmcToFax(SubmodelElementCollection smc) {
+    private Optional<Fax> convertSmcToFax(SubmodelElementCollection smc) {
+        //get fax number mlp
+        List<SubmodelElement> faxNumberSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.faxNumber, smc.getValue());
 
+        //fax number is not optional
+        if(faxNumberSubmodelElements.isEmpty()) {
+            return Optional.empty();
+        }
+
+        MultiLanguageProperty faxNumberMlp = (MultiLanguageProperty) faxNumberSubmodelElements.getFirst();
+        HashMap<String, String> faxNumber = convertMlpToHashmap(faxNumberMlp.getValue());
+
+        //get type of fax number property
+        List<SubmodelElement> typeOfFaxNumberSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.typeOfFaxNumber, smc.getValue());
+        Optional<TypeOfFaxNumber> optTypeOfFaxNumber = Optional.empty();
+
+        if(!typeOfFaxNumberSubmodelElements.isEmpty()) {
+            Property typeOfFaxNumberProperty = (Property) typeOfFaxNumberSubmodelElements.getFirst();
+            optTypeOfFaxNumber = TypeOfFaxNumber.createFromSemanticId(typeOfFaxNumberProperty.getValue());
+        }
+
+        //map collected values on fax object
+        Fax fax = new Fax(faxNumber);
+
+        if(optTypeOfFaxNumber.isPresent()) {
+            fax.setTypeOfFaxNumber(optTypeOfFaxNumber.get());
+        }
+
+        return Optional.of(fax);
     }
 
     private Email convertSmcToEmail(SubmodelElementCollection smc) {
