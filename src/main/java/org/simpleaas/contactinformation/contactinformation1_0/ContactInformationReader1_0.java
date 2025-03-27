@@ -3,6 +3,7 @@ package org.simpleaas.contactinformation.contactinformation1_0;
 import org.eclipse.digitaltwin.aas4j.v3.model.*;
 import org.simpleaas.contactinformation.ContactInformationConstants;
 import org.simpleaas.contactinformation.contactinformation1_0.email.Email;
+import org.simpleaas.contactinformation.contactinformation1_0.email.TypeOfEmailAddress;
 import org.simpleaas.contactinformation.contactinformation1_0.fax.Fax;
 import org.simpleaas.contactinformation.contactinformation1_0.fax.TypeOfFaxNumber;
 import org.simpleaas.contactinformation.contactinformation1_0.ipcommunication.IpCommunication;
@@ -109,8 +110,55 @@ public class ContactInformationReader1_0 {
         return Optional.of(fax);
     }
 
-    private Email convertSmcToEmail(SubmodelElementCollection smc) {
+    private Optional<Email> convertSmcToEmail(SubmodelElementCollection smc) {
+        //get email address property
+        List<SubmodelElement> emailAddressSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.emailAddress, smc.getValue());
 
+        //email address is not optional
+        if(emailAddressSubmodelElements.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Property emailAddressProperty = (Property) emailAddressSubmodelElements.getFirst();
+        String emailAddress = emailAddressProperty.getValue();
+
+        //get public key mlp
+        List<SubmodelElement> publicKeySubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.publicKey, smc.getValue());
+        HashMap<String, String> publicKey = new HashMap<>();
+
+        if(!publicKeySubmodelElements.isEmpty()) {
+            MultiLanguageProperty publicKeyMlp = (MultiLanguageProperty) publicKeySubmodelElements.getFirst();
+            publicKey = convertMlpToHashmap(publicKeyMlp.getValue());
+        }
+
+        //get type of email address property
+        List<SubmodelElement> typeOfEmailAddressSubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.typeOfEmailAddress, smc.getValue());
+        Optional<TypeOfEmailAddress> optTypeOfEmailAddress = Optional.empty();
+
+        if(!typeOfEmailAddressSubmodelElements.isEmpty()) {
+            Property typeOfEmailAddressProperty = (Property) typeOfEmailAddressSubmodelElements.getFirst();
+            optTypeOfEmailAddress = TypeOfEmailAddress.createFromSemanticId(typeOfEmailAddressProperty.getValue());
+        }
+
+        //get type of public key mlp
+        List<SubmodelElement> typeOfPublicKeySubmodelElements = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.typeOfPublicKey, smc.getValue());
+        HashMap<String, String> typeOfPublicKey = new HashMap<>();
+
+        if(!typeOfPublicKeySubmodelElements.isEmpty()) {
+            MultiLanguageProperty typeOfPublicKeyMlp = (MultiLanguageProperty) typeOfPublicKeySubmodelElements.getFirst();
+            typeOfPublicKey = convertMlpToHashmap(typeOfPublicKeyMlp.getValue());
+        }
+
+        //map on email
+        Email email = new Email(emailAddress);
+        email.setPublicKey(publicKey)
+                .setTypeOfPublicKey(typeOfPublicKey);
+
+        if(optTypeOfEmailAddress.isPresent()) {
+            email.setTypeOfEmailAddress(optTypeOfEmailAddress.get());
+        }
+
+        return Optional.of(email);
     }
 
     private IpCommunication convertSmcToIpCommunication(SubmodelElementCollection smc) {
