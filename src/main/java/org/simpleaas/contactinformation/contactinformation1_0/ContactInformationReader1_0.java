@@ -23,17 +23,161 @@ public class ContactInformationReader1_0 {
         this.submodel = submodel;
     }
 
-    public static ContactInformation getContactInformation(SubmodelElementCollection contactInformation) {
-        return new ContactInformation();
-    }
-
     public List<ContactInformation> getContactInformation() {
 
         return this.submodel.getSubmodelElements().stream()
                 .filter(se -> se instanceof SubmodelElementCollection)
                 .map(se -> ((SubmodelElementCollection)se))
-                .map(ContactInformationReader1_0::getContactInformation)
+                .map(this::getContactInformation)
                 .toList();
+    }
+
+    private ContactInformation getContactInformation(SubmodelElementCollection contactInformationSmc) {
+        ContactInformation contactInformation = new ContactInformation();
+
+        //get role of contact person
+        List<SubmodelElement> roleOfContactPersonSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.roleOfContactPerson, contactInformationSmc.getValue());
+
+        if(!roleOfContactPersonSEs.isEmpty()) {
+            Property roleOfContactPersonProperty = (Property) roleOfContactPersonSEs.getFirst();
+            Optional<RoleOfContactPerson> optRoleOfContactPerson = RoleOfContactPerson.createFromSemanticId(roleOfContactPersonProperty.getValue());
+
+            if(optRoleOfContactPerson.isPresent()) {
+                contactInformation.setRoleOfContactPerson(optRoleOfContactPerson.get());
+            }
+        }
+
+        //get national code
+        List<SubmodelElement> nationalCodeSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.nationalCode, contactInformationSmc.getValue());
+
+        if(!nationalCodeSEs.isEmpty()) {
+            MultiLanguageProperty nationalCodeMlp = (MultiLanguageProperty) nationalCodeSEs.getFirst();
+            HashMap<String, String> nationalCode = convertMlpToHashmap(nationalCodeMlp.getValue());
+
+            contactInformation.setNationalCode(nationalCode);
+        }
+
+        //get language
+        List<SubmodelElement> languageSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.language, contactInformationSmc.getValue());
+
+        for(SubmodelElement languageSE: languageSEs) {
+            Property languageProperty = (Property) languageSE;
+            contactInformation.addLanguage(languageProperty.getValue());
+        }
+
+        //get time zone
+        List<SubmodelElement> timeZoneSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.timeZone, contactInformationSmc.getValue());
+
+        if(!timeZoneSEs.isEmpty()) {
+            Property timeZoneProperty = (Property) timeZoneSEs.getFirst();
+            contactInformation.setTimeZone(timeZoneProperty.getValue());
+        }
+
+        //get city town
+        List<SubmodelElement> cityTownSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.cityTown, contactInformationSmc.getValue());
+
+        if(!cityTownSEs.isEmpty()) {
+            MultiLanguageProperty cityTownMlp = (MultiLanguageProperty) cityTownSEs.getFirst();
+            contactInformation.setCityTown(convertMlpToHashmap(cityTownMlp.getValue()));
+        }
+
+        //get company
+        List<SubmodelElement> companySEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.company, contactInformationSmc.getValue());
+
+        if (!companySEs.isEmpty()) {
+            MultiLanguageProperty companyMlp = (MultiLanguageProperty) companySEs.getFirst();
+            contactInformation.setCompany(convertMlpToHashmap(companyMlp.getValue()));
+        }
+
+        //get department
+        List<SubmodelElement> departmentSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.department, contactInformationSmc.getValue());
+
+        if(!departmentSEs.isEmpty()) {
+            MultiLanguageProperty departmentMlp = (MultiLanguageProperty) departmentSEs.getFirst();
+            contactInformation.setDepartment(convertMlpToHashmap(departmentMlp.getValue()));
+        }
+
+        //get phone
+        List<SubmodelElement> phoneSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.id, contactInformationSmc.getValue());
+
+        if(!phoneSEs.isEmpty()) {
+            Optional<Phone> optPhone = convertSmcToPhone((SubmodelElementCollection) phoneSEs.getFirst());
+
+            if(optPhone.isPresent()) {
+                contactInformation.setPhone(optPhone.get());
+            }
+        }
+
+        //get fax
+        List<SubmodelElement> faxSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.id, contactInformationSmc.getValue());
+
+        if(!faxSEs.isEmpty()) {
+            Optional<Fax> optFax = convertSmcToFax((SubmodelElementCollection) phoneSEs.getFirst());
+
+            if(optFax.isPresent()) {
+                contactInformation.setFax(optFax.get());
+            }
+        }
+
+        //get email
+        List<SubmodelElement> emailSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.id, contactInformationSmc.getValue());
+
+        if(!emailSEs.isEmpty()) {
+            Optional<Email> optEmail = convertSmcToEmail((SubmodelElementCollection) emailSEs.getFirst());
+
+            if(optEmail.isPresent()) {
+                contactInformation.setEmail(optEmail.get());
+            }
+        }
+
+        //get ip communications
+        List<SubmodelElement> ipCommunicationSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.id, contactInformationSmc.getValue());
+
+        for(SubmodelElement ipCommunicationSE: ipCommunicationSEs) {
+            Optional<IpCommunication> optIpCommunication = convertSmcToIpCommunication((SubmodelElementCollection) ipCommunicationSE);
+
+            if(optIpCommunication.isPresent()) {
+                contactInformation.addIpCommunication(optIpCommunication.get());
+            }
+        }
+
+        //get street
+        List<SubmodelElement> streetSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.street, contactInformationSmc.getValue());
+
+        if(!streetSEs.isEmpty()) {
+            MultiLanguageProperty streetMlp = (MultiLanguageProperty) streetSEs.getFirst();
+            contactInformation.setStreet(convertMlpToHashmap(streetMlp.getValue()));
+        }
+
+        //get zipcode
+        List<SubmodelElement> zipCodeSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.zipcode, contactInformationSmc.getValue());
+
+        if(!streetSEs.isEmpty()) {
+            MultiLanguageProperty zipCodeMlp = (MultiLanguageProperty) zipCodeSEs.getFirst();
+            contactInformation.setZipCode(convertMlpToHashmap(zipCodeMlp.getValue()));
+        }
+
+        //get pobox
+
+        //get zipcode of pobox
+
+        //get state county
+
+        //get name of contact
+
+        //get first name
+
+        //get middle names
+
+        //get title
+
+        //get academic title
+
+        //get further details of contact
+
+        //get address of additional link
+
+        return contactInformation;
     }
 
     private Optional<Phone> convertSmcToPhone(SubmodelElementCollection smc) {
