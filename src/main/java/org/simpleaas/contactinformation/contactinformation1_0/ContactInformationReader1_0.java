@@ -1,6 +1,7 @@
 package org.simpleaas.contactinformation.contactinformation1_0;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.*;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
 import org.simpleaas.contactinformation.ContactInformationConstants;
 import org.simpleaas.contactinformation.contactinformation1_0.email.Email;
 import org.simpleaas.contactinformation.contactinformation1_0.email.TypeOfEmailAddress;
@@ -21,6 +22,13 @@ public class ContactInformationReader1_0 {
 
     public ContactInformationReader1_0(Submodel submodel) {
         this.submodel = submodel;
+    }
+
+    public static ContactInformation convertSMCtoContactInformation(SubmodelElementCollection contactInformationSMC) {
+        //create reader with empty submodel
+        ContactInformationReader1_0 contactInformationReader = new ContactInformationReader1_0(new DefaultSubmodel.Builder().build());
+
+        return contactInformationReader.getContactInformation(contactInformationSMC);
     }
 
     public List<ContactInformation> getContactInformation() {
