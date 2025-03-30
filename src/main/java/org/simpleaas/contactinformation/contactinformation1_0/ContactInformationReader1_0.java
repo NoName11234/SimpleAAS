@@ -166,14 +166,43 @@ public class ContactInformationReader1_0 {
         }
 
         //get pobox
+        List<SubmodelElement> poBoxSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.poBox, contactInformationSmc.getValue());
+
+        if(!poBoxSEs.isEmpty()) {
+            MultiLanguageProperty poBoxMlp = (MultiLanguageProperty) poBoxSEs.getFirst();
+            contactInformation.setPoBox(convertMlpToHashmap(poBoxMlp.getValue()));
+        }
 
         //get zipcode of pobox
+        List<SubmodelElement> zipCodePoBoxSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.zipCodeOfPoBox, contactInformationSmc.getValue());
+
+        if(!zipCodePoBoxSEs.isEmpty()) {
+            MultiLanguageProperty zipCodePoBoxMlp = (MultiLanguageProperty) zipCodePoBoxSEs.getFirst();
+            contactInformation.setZipCodeOfPoBox(convertMlpToHashmap(zipCodePoBoxMlp.getValue()));
+        }
 
         //get state county
+        List<SubmodelElement> stateCountySEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.stateCounty, contactInformationSmc.getValue());
+
+        if(!stateCountySEs.isEmpty()) {
+            MultiLanguageProperty stateCountyMlp = (MultiLanguageProperty) stateCountySEs.getFirst();
+            contactInformation.setStateCounty(convertMlpToHashmap(stateCountyMlp.getValue()));
+        }
 
         //get name of contact
+        List<SubmodelElement> nameOfContactSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.nameOfContact, contactInformationSmc.getValue());
+
+        if(!nameOfContactSEs.isEmpty()) {
+            MultiLanguageProperty nameOfContactMlp = (MultiLanguageProperty) nameOfContactSEs.getFirst();
+            contactInformation.setNameOfContact(convertMlpToHashmap(nameOfContactMlp.getValue()));
+        }
 
         //get first name
+        List<SubmodelElement> firstNameSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.firstName, contactInformationSmc.getValue());
+
+        if(!firstNameSEs.isEmpty()) {
+            MultiLanguageProperty firstNameMlp = (MultiLanguageProperty) nameOfContactSEs.getFirst();
+        }
 
         //get middle names
 
