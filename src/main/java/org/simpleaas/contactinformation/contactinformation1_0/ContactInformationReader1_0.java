@@ -202,17 +202,48 @@ public class ContactInformationReader1_0 {
 
         if(!firstNameSEs.isEmpty()) {
             MultiLanguageProperty firstNameMlp = (MultiLanguageProperty) nameOfContactSEs.getFirst();
+            contactInformation.setFirstName(convertMlpToHashmap(firstNameMlp.getValue()));
         }
 
         //get middle names
+        List<SubmodelElement> middleNameSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.middleNames, contactInformationSmc.getValue());
+
+        if(!middleNameSEs.isEmpty()) {
+            MultiLanguageProperty middleNameMlp = (MultiLanguageProperty) middleNameSEs.getFirst();
+            contactInformation.setMiddleName(convertMlpToHashmap(middleNameMlp.getValue()));
+        }
 
         //get title
+        List<SubmodelElement> titleSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.title, contactInformationSmc.getValue());
+
+        if(!titleSEs.isEmpty()) {
+            MultiLanguageProperty titleMlp = (MultiLanguageProperty) titleSEs.getFirst();
+            contactInformation.setTitle(convertMlpToHashmap(titleMlp.getValue()));
+        }
 
         //get academic title
+        List<SubmodelElement> academicTitleSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.academicTitle, contactInformationSmc.getValue());
+
+        if(!academicTitleSEs.isEmpty()) {
+            MultiLanguageProperty academicTitleMlp = (MultiLanguageProperty) academicTitleSEs.getFirst();
+            contactInformation.setAcademicTitle(convertMlpToHashmap(academicTitleMlp.getValue()));
+        }
 
         //get further details of contact
+        List<SubmodelElement> furtherDetailsOfContactSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.furtherDetailsOfContact, contactInformationSmc.getValue());
+
+        if(!furtherDetailsOfContactSEs.isEmpty()) {
+            MultiLanguageProperty furtherDetailsOfContactMlp = (MultiLanguageProperty) furtherDetailsOfContactSEs.getFirst();
+            contactInformation.setFurtherDetailsOfContact(convertMlpToHashmap(furtherDetailsOfContactMlp.getValue()));
+        }
 
         //get address of additional link
+        List<SubmodelElement> addressOfAdditionalLinkSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.addressOfAdditionalLink, contactInformationSmc.getValue());
+
+        if(!addressOfAdditionalLinkSEs.isEmpty()) {
+            Property addressOfAdditionalLinkProp = (Property) addressOfAdditionalLinkSEs.getFirst();
+            contactInformation.setAddressOfAdditionalLink(addressOfAdditionalLinkProp.getValue());
+        }
 
         return contactInformation;
     }
