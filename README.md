@@ -1,5 +1,5 @@
 # SimpleAAS library
-Java library for simple usage of different submodel standards of the IDTA.
+Java library for simple usage of different submodel standards of asset administration shells.
 
 ## Supported submodel standards
 | Submodel Name | Version | Reading | Writing |
