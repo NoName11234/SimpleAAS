@@ -24,9 +24,23 @@ public enum TypeOfTelephone {
 
         switch (semanticId) {
             case "0173-1#07-AAS754#001" -> {
-                Optional.of(TypeOfTelephone.Office);
+                return Optional.of(TypeOfTelephone.Office);
             }
-            
+            case "0173-1#07-AAS755#001" -> {
+                return Optional.of(TypeOfTelephone.OfficeMobile);
+            }
+            case "0173-1#07-AAS756#001" -> {
+                return Optional.of(TypeOfTelephone.Secretary);
+            }
+            case "0173-1#07-AAS757#001" -> {
+                return Optional.of(TypeOfTelephone.Substitute);
+            }
+            case "0173-1#07-AAS758#001" -> {
+                return Optional.of(TypeOfTelephone.Home);
+            }
+            case "0173-1#07-AAS759#001" -> {
+                return Optional.of(TypeOfTelephone.PrivateMobile);
+            }
             default -> {
                 return Optional.empty();
             }
