@@ -53,9 +53,74 @@ public class ContactInformationTester1_0 {
             return errors;
         }
 
-        return new ArrayList<>();
+        for(SubmodelElementCollection contactInformation: contactInformationElements) {
+            errors.addAll(checkContactInformationCollection(contactInformation));
+        }
+
+        return errors;
     }
 
+    /**
+     * Checks the given submodel element collection for conformity with the contact information submodel element collection.
+     * @param contactInformation the submodel element collection to be tested for conformity
+     * @return list of found standard violations of the submodel, empty if no problems were found
+     */
+    private List<String> checkContactInformationCollection(SubmodelElementCollection contactInformation) {
+        List<String> errors = new ArrayList<>();
+
+        return errors;
+    }
+
+    /**
+     * Checks the given submodel element collection for conformity with the phone submodel element collection.
+     * @param phone the submodel element collection to be tested for conformity
+     * @return list of found standard violations of the submodel, empty if no problems were found
+     */
+    private List<String> checkPhoneCollection(SubmodelElementCollection phone) {
+        List<String> errors = new ArrayList<>();
+
+        return errors;
+    }
+
+    /**
+     * Checks the given submodel element collection for conformity with the fax submodel element collection.
+     * @param fax the submodel element collection to be tested for conformity
+     * @return list of found standard violations of the submodel, empty if no problems were found
+     */
+    private List<String> checkFaxCollection(SubmodelElementCollection fax) {
+        List<String> errors = new ArrayList<>();
+
+        return errors;
+    }
+
+    /**
+     * Checks the given submodel element collection for conformity with the email submodel element collection.
+     * @param email the submodel element collection to be tested for conformity
+     * @return list of found standard violations of the submodel, empty if no problems were found
+     */
+    private List<String> checkEmailCollection(SubmodelElementCollection email) {
+        List<String> errors = new ArrayList<>();
+
+        return errors;
+    }
+
+    /**
+     * Checks the given submodel element collection for conformity with the ip communication submodel element collection.
+     * @param ipCommunication the submodel element collection to be tested for conformity
+     * @return list of found standard violations of the submodel, empty if no problems were found
+     */
+    private List<String> checkIpCommunicationCollection(SubmodelElementCollection ipCommunication) {
+        List<String> errors = new ArrayList<>();
+
+        return errors;
+    }
+
+    /**
+     * Compares a reference to a given semantic ID.
+     * @param reference the reference to compare to the defined semantic ID
+     * @param semanticId the semantic ID to compare to the given reference
+     * @return true if the given semantic ID is part of the given reference
+     */
     private boolean compareSemanticId(Reference reference, String semanticId) {
         List<Key> keys = reference.getKeys();
 
