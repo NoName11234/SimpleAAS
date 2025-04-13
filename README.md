@@ -3,11 +3,11 @@ Java library for simple usage of different submodel standards of asset administr
 
 ## Supported submodel standards
 | Submodel Name | Version | Reading | Writing | Testing |
-|----|----|----|----|----|
-| Contact Information | 1.0 | Yes | No | No |
+|----|----|----|---------|----|
+| Contact Information | 1.0 | Yes | Yes | No |
 
 ## Planned features
-- Contact Information 1.0: writing, conformity testing
+- Contact Information 1.0: conformity testing
 - Digital Nameplate 2.0: reading, writing, conformity testing
 - Digital Nameplate 3.0: reading, writing, conformity testing
 
