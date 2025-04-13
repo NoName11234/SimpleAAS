@@ -5,6 +5,7 @@ import org.simpleaas.contactinformation.ContactInformationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Class for testing the conformity of a submodel with the submodel standard Contact Information 1.0.
@@ -54,7 +55,11 @@ public class ContactInformationTester1_0 {
         }
 
         for(SubmodelElementCollection contactInformation: contactInformationElements) {
-            errors.addAll(checkContactInformationCollection(contactInformation));
+            List<String> contactInformationErrors = checkContactInformationCollection(contactInformation);
+
+            for(String contactInformationError: contactInformationErrors) {
+                errors.add("In submodel element " + contactInformation.getIdShort() + ": " + contactInformationError);
+            }
         }
 
         return errors;
@@ -67,6 +72,36 @@ public class ContactInformationTester1_0 {
      */
     private List<String> checkContactInformationCollection(SubmodelElementCollection contactInformation) {
         List<String> errors = new ArrayList<>();
+
+        //check role of contact person
+        List<Property> roleOfContactPersons = new ArrayList<>();
+
+        List<SubmodelElement> roleOfContactPersonSEs = contactInformation.getValue().stream()
+                .filter(se -> compareSemanticId(se.getSemanticId(), ContactInformationConstants.ContactInformations1_0.ContactInformation.roleOfContactPerson))
+                .toList();
+
+        //check whether submodel elements are from type property
+        for(SubmodelElement roleOfContactPersonSE: roleOfContactPersonSEs) {
+            if(roleOfContactPersonSE instanceof Property p) {
+                roleOfContactPersons.add(p);
+            } else {
+                errors.add("Submodel element " + roleOfContactPersonSE.getIdShort() + " with role of contact person data is from type " + roleOfContactPersonSE.getClass().getName() + " instead of type Property.");
+            }
+        }
+
+        //check the cardinality of role of contact person
+        if(roleOfContactPersons.size() > 1) {
+            errors.add("There are " + roleOfContactPersons.size() + " instances of submodel element role of contact person instead of 0-1.");
+        }
+
+        //check the value of role of contact person
+        for(Property roleOfContactPerson: roleOfContactPersons) {
+            Optional<RoleOfContactPerson> optRoleOfContactPersonValue = RoleOfContactPerson.createFromSemanticId(roleOfContactPerson.getValue());
+
+            if(optRoleOfContactPersonValue.isEmpty()) {
+                errors.add("Submodel element " + roleOfContactPerson.getIdShort() + " of type role of contact person does not contain a semantic ID defining a contact person role.");
+            }
+        }
 
         return errors;
     }
