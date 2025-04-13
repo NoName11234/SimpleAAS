@@ -94,6 +94,27 @@ public class ContactInformationTester1_0 {
             errors.add("There are " + roleOfContactPersons.size() + " instances of submodel element role of contact person instead of 0-1.");
         }
 
+        //check national code
+        List<MultiLanguageProperty> nationalCodes = new ArrayList<>();
+
+        List<SubmodelElement> nationalCodeSEs = contactInformation.getValue().stream()
+                .filter(se -> compareSemanticId(se.getSemanticId(), ContactInformationConstants.ContactInformations1_0.ContactInformation.nationalCode))
+                .toList();
+
+        //check whether submodel elements are from type multilanguage property
+        for(SubmodelElement nationalCodeSE: nationalCodeSEs) {
+            if(nationalCodeSE instanceof MultiLanguageProperty mlp) {
+                nationalCodes.add(mlp);
+            } else {
+                errors.add("Submodel element " + nationalCodeSE.getIdShort() + " with national code data is from type " + nationalCodeSE.getClass().getName() + " instead of type MultiLanguageProperty");
+            }
+        }
+
+        //check the cardinality of national code
+        if(nationalCodes.size() > 1) {
+            errors.add("There are " + nationalCodes.size() + " instances of submodel element national code instead of 0-1.");
+        }
+
         return errors;
     }
 
