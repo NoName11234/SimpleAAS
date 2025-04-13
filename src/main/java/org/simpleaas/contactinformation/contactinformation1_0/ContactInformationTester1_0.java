@@ -94,15 +94,6 @@ public class ContactInformationTester1_0 {
             errors.add("There are " + roleOfContactPersons.size() + " instances of submodel element role of contact person instead of 0-1.");
         }
 
-        //check the value of role of contact person
-        for(Property roleOfContactPerson: roleOfContactPersons) {
-            Optional<RoleOfContactPerson> optRoleOfContactPersonValue = RoleOfContactPerson.createFromSemanticId(roleOfContactPerson.getValue());
-
-            if(optRoleOfContactPersonValue.isEmpty()) {
-                errors.add("Submodel element " + roleOfContactPerson.getIdShort() + " of type role of contact person does not contain a semantic ID defining a contact person role.");
-            }
-        }
-
         return errors;
     }
 
