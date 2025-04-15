@@ -29,7 +29,51 @@ public class SubmodelElementCopier {
 
             }
             case RelationshipElement relationshipElement -> {
+                var relElemBuilder = new DefaultRelationshipElement.Builder();
 
+                relElemBuilder.idShort(relationshipElement.getIdShort());
+
+                for(LangStringNameType displayName: relationshipElement.getDisplayName()) {
+                    relElemBuilder.displayName(copyLangStringNameType(displayName));
+                }
+
+                relElemBuilder.category(relationshipElement.getCategory());
+
+                for(LangStringTextType description: relationshipElement.getDescription()) {
+                    relElemBuilder.description(copyLangStringTextType(description));
+                }
+
+                if(relationshipElement.getSemanticId() != null) {
+                    relElemBuilder.semanticId(copyReference(relationshipElement.getSemanticId()));
+                }
+
+                for(Reference supplementalSemanticId: relationshipElement.getSupplementalSemanticIds()) {
+                    relElemBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+                }
+
+                for(Qualifier qualifier: relationshipElement.getQualifiers()) {
+                    relElemBuilder.qualifiers(copyQualifier(qualifier));
+                }
+
+                for(EmbeddedDataSpecification dataSpecification: relationshipElement.getEmbeddedDataSpecifications()) {
+                    relElemBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+                }
+
+                for(Extension extension: relationshipElement.getExtensions()) {
+                    if(extension instanceof DefaultExtension de) {
+                        relElemBuilder.extensions(copyExtension(de));
+                    }
+                }
+
+                if(relationshipElement.getFirst() != null) {
+                    relElemBuilder.first(copyReference(relationshipElement.getFirst()));
+                }
+
+                if(relationshipElement.getSecond() != null) {
+                    relElemBuilder.second(copyReference(relationshipElement.getSecond()));
+                }
+
+                return relElemBuilder.build();
             }
             case Property property -> {
                 var propertyBuilder = new DefaultProperty.Builder();
