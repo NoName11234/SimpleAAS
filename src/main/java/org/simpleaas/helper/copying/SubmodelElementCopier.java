@@ -3,6 +3,8 @@ package org.simpleaas.helper.copying;
 import org.eclipse.digitaltwin.aas4j.v3.model.*;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.*;
 
+import java.util.Arrays;
+
 /**
  * Class for copying submodel elements.
  */
@@ -41,7 +43,7 @@ public class SubmodelElementCopier {
                 return copyRange(range);
             }
             case Blob blob -> {
-
+                return copyBlob(blob);
             }
             case File file -> {
 
@@ -76,6 +78,53 @@ public class SubmodelElementCopier {
 
     private DataElement copyDataElement(DataElement original) {
 
+    }
+
+    /**
+     * Creates a copy of a Blob.
+     * @param original the original Blob to be copied
+     * @return copied Blob
+     */
+    private Blob copyBlob(Blob original) {
+        var blobBuilder = new DefaultBlob.Builder();
+
+        blobBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            blobBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        blobBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            blobBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            blobBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            blobBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            blobBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            blobBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                blobBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        blobBuilder.value(Arrays.copyOf(original.getValue(), original.getValue().length));
+
+        return blobBuilder.build();
     }
 
     /**
