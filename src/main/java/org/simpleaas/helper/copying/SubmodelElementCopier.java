@@ -25,102 +25,14 @@ public class SubmodelElementCopier {
      */
     private SubmodelElement createCopy() {
         switch (original) {
-            case AnnotatedRelationshipElement annotatedRelationshipElement -> {
-
+            case DefaultAnnotatedRelationshipElement annotatedRelationshipElement -> {
+                return copyAnnotatedRelationshipElement(annotatedRelationshipElement);
             }
-            case RelationshipElement relationshipElement -> {
-                var relElemBuilder = new DefaultRelationshipElement.Builder();
-
-                relElemBuilder.idShort(relationshipElement.getIdShort());
-
-                for(LangStringNameType displayName: relationshipElement.getDisplayName()) {
-                    relElemBuilder.displayName(copyLangStringNameType(displayName));
-                }
-
-                relElemBuilder.category(relationshipElement.getCategory());
-
-                for(LangStringTextType description: relationshipElement.getDescription()) {
-                    relElemBuilder.description(copyLangStringTextType(description));
-                }
-
-                if(relationshipElement.getSemanticId() != null) {
-                    relElemBuilder.semanticId(copyReference(relationshipElement.getSemanticId()));
-                }
-
-                for(Reference supplementalSemanticId: relationshipElement.getSupplementalSemanticIds()) {
-                    relElemBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
-                }
-
-                for(Qualifier qualifier: relationshipElement.getQualifiers()) {
-                    relElemBuilder.qualifiers(copyQualifier(qualifier));
-                }
-
-                for(EmbeddedDataSpecification dataSpecification: relationshipElement.getEmbeddedDataSpecifications()) {
-                    relElemBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
-                }
-
-                for(Extension extension: relationshipElement.getExtensions()) {
-                    if(extension instanceof DefaultExtension de) {
-                        relElemBuilder.extensions(copyExtension(de));
-                    }
-                }
-
-                if(relationshipElement.getFirst() != null) {
-                    relElemBuilder.first(copyReference(relationshipElement.getFirst()));
-                }
-
-                if(relationshipElement.getSecond() != null) {
-                    relElemBuilder.second(copyReference(relationshipElement.getSecond()));
-                }
-
-                return relElemBuilder.build();
+            case DefaultRelationshipElement relationshipElement -> {
+                return copyRelationshipElement(relationshipElement);
             }
-            case Property property -> {
-                var propertyBuilder = new DefaultProperty.Builder();
-
-                propertyBuilder.idShort(property.getIdShort());
-
-                for(LangStringNameType displayName: property.getDisplayName()) {
-                    propertyBuilder.displayName(copyLangStringNameType(displayName));
-                }
-
-                propertyBuilder.category(property.getCategory());
-
-                for(LangStringTextType description: property.getDescription()) {
-                    propertyBuilder.description(copyLangStringTextType(description));
-                }
-
-                if(property.getSemanticId() != null) {
-                    propertyBuilder.semanticId(copyReference(property.getSemanticId()));
-                }
-
-                for(Reference supplementalSemanticId: property.getSupplementalSemanticIds()) {
-                    propertyBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
-                }
-
-                for(Qualifier qualifier: property.getQualifiers()) {
-                    propertyBuilder.qualifiers(copyQualifier(qualifier));
-                }
-
-                for(EmbeddedDataSpecification dataSpecification: property.getEmbeddedDataSpecifications()) {
-                    propertyBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
-                }
-
-                for(Extension extension: property.getExtensions()) {
-                    if(extension instanceof DefaultExtension de) {
-                        propertyBuilder.extensions(copyExtension(de));
-                    }
-                }
-
-                propertyBuilder.valueType(property.getValueType());
-
-                propertyBuilder.value(property.getValue());
-
-                if(property.getValueId() != null) {
-                    propertyBuilder.valueId(copyReference(property.getValueId()));
-                }
-
-                return propertyBuilder.build();
+            case DefaultProperty property -> {
+                return copyProperty(property);
             }
             case MultiLanguageProperty multiLanguageProperty -> {
 
@@ -160,6 +72,173 @@ public class SubmodelElementCopier {
             }
             default -> throw new IllegalStateException("Unsupported submodel element sub type: " + original.getClass().getName());
         }
+    }
+
+    private DataElement copyDataElement(DataElement original) {
+
+    }
+
+    /**
+     * Create a copy of an AnnotatedRelationshipElement.
+     * @param original the original AnnotatedRelationshipElement to be copied
+     * @return copied AnnotatedRelationshipElement
+     */
+    private AnnotatedRelationshipElement copyAnnotatedRelationshipElement(AnnotatedRelationshipElement original) {
+        var anRelElemBuilder = new DefaultAnnotatedRelationshipElement.Builder();
+
+        anRelElemBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            anRelElemBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        anRelElemBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            anRelElemBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            anRelElemBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            anRelElemBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            anRelElemBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            anRelElemBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                anRelElemBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        for(DataElement dataElement: original.getAnnotations()){
+            anRelElemBuilder.annotations(copyDataElement(dataElement));
+        }
+
+        if(original.getFirst() != null){
+            anRelElemBuilder.first(copyReference(original.getFirst()));
+        }
+
+        if(original.getSecond() != null){
+            anRelElemBuilder.second(copyReference(original.getSecond()));
+        }
+
+        return anRelElemBuilder.build();
+    }
+
+    /**
+     * Create a copy of a RelationshipElement.
+     * @param original the original RelationshipElement to be copied
+     * @return copied RelationshipElement
+     */
+    private RelationshipElement copyRelationshipElement(RelationshipElement original) {
+        var relElemBuilder = new DefaultRelationshipElement.Builder();
+
+        relElemBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            relElemBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        relElemBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            relElemBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            relElemBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            relElemBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            relElemBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            relElemBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                relElemBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        if(original.getFirst() != null) {
+            relElemBuilder.first(copyReference(original.getFirst()));
+        }
+
+        if(original.getSecond() != null) {
+            relElemBuilder.second(copyReference(original.getSecond()));
+        }
+
+        return relElemBuilder.build();
+    }
+
+    /**
+     * Create a copy of a Property.
+     * @param original the original Property to be copied
+     * @return copied Property
+     */
+    private Property copyProperty(DefaultProperty original) {
+        var propertyBuilder = new DefaultProperty.Builder();
+
+        propertyBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            propertyBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        propertyBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            propertyBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            propertyBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            propertyBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            propertyBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            propertyBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                propertyBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        propertyBuilder.valueType(original.getValueType());
+
+        propertyBuilder.value(original.getValue());
+
+        if(original.getValueId() != null) {
+            propertyBuilder.valueId(copyReference(original.getValueId()));
+        }
+
+        return propertyBuilder.build();
     }
 
     /**
