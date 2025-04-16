@@ -81,6 +81,51 @@ public class SubmodelElementCopier {
     }
 
     /**
+     * Creates a copy of a Capability.
+     * @param original  the original Capability to be copied
+     * @return copied Capability
+     */
+    private Capability copyCapability(Capability original) {
+        var capBuilder = new DefaultCapability.Builder();
+
+        capBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            capBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        capBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            capBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            capBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            capBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            capBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            capBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                capBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        return capBuilder.build();
+    }
+
+    /**
      * Creates a copy of a ReferenceElement.
      * @param original  the original ReferenceElement to be copied
      * @return copied ReferenceElement
