@@ -49,7 +49,7 @@ public class SubmodelElementCopier {
                 return copyFile(file);
             }
             case ReferenceElement referenceElement -> {
-
+                return copyReferenceElement(referenceElement);
             }
             case Capability capability -> {
 
@@ -78,6 +78,53 @@ public class SubmodelElementCopier {
 
     private DataElement copyDataElement(DataElement original) {
 
+    }
+
+    /**
+     * Creates a copy of a ReferenceElement.
+     * @param original  the original ReferenceElement to be copied
+     * @return copied ReferenceElement
+     */
+    private ReferenceElement copyReferenceElement(ReferenceElement original) {
+        var refElemBuilder = new DefaultReferenceElement.Builder();
+
+        refElemBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            refElemBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        refElemBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            refElemBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            refElemBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            refElemBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            refElemBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            refElemBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                refElemBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        refElemBuilder.value(copyReference(original.getValue()));
+
+        return refElemBuilder.build();
     }
 
     /**
