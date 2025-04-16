@@ -35,10 +35,10 @@ public class SubmodelElementCopier {
                 return copyProperty(property);
             }
             case MultiLanguageProperty multiLanguageProperty -> {
-
+                return copyMultiLanguageProperty(multiLanguageProperty);
             }
             case Range range -> {
-
+                return copyRange(range);
             }
             case Blob blob -> {
 
@@ -76,6 +76,57 @@ public class SubmodelElementCopier {
 
     private DataElement copyDataElement(DataElement original) {
 
+    }
+
+    /**
+     * Creates a copy of a Range.
+     * @param original the original Range to be copied
+     * @return copied Range
+     */
+    private Range copyRange(Range original) {
+        var rangeBuilder = new DefaultRange.Builder();
+
+        rangeBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            rangeBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        rangeBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            rangeBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            rangeBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            rangeBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            rangeBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            rangeBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                rangeBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        rangeBuilder.valueType(original.getValueType());
+
+        rangeBuilder.max(original.getMax());
+
+        rangeBuilder.min(original.getMin());
+
+        return rangeBuilder.build();
     }
 
     /**
