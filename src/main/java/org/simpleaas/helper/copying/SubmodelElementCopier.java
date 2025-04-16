@@ -25,13 +25,13 @@ public class SubmodelElementCopier {
      */
     private SubmodelElement createCopy() {
         switch (original) {
-            case DefaultAnnotatedRelationshipElement annotatedRelationshipElement -> {
+            case AnnotatedRelationshipElement annotatedRelationshipElement -> {
                 return copyAnnotatedRelationshipElement(annotatedRelationshipElement);
             }
-            case DefaultRelationshipElement relationshipElement -> {
+            case RelationshipElement relationshipElement -> {
                 return copyRelationshipElement(relationshipElement);
             }
-            case DefaultProperty property -> {
+            case Property property -> {
                 return copyProperty(property);
             }
             case MultiLanguageProperty multiLanguageProperty -> {
@@ -76,6 +76,59 @@ public class SubmodelElementCopier {
 
     private DataElement copyDataElement(DataElement original) {
 
+    }
+
+    /**
+     * Create a copy of a MultiLanguageProperty.
+     * @param original the original MultiLanguageProperty to be copied
+     * @return copied MultiLanguageProperty
+     */
+    private MultiLanguageProperty copyMultiLanguageProperty(MultiLanguageProperty original) {
+        var mlpBuilder = new DefaultMultiLanguageProperty.Builder();
+
+        mlpBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            mlpBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        mlpBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            mlpBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            mlpBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            mlpBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            mlpBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            mlpBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                mlpBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        for(LangStringTextType value: original.getValue()) {
+            mlpBuilder.value(copyLangStringTextType(value));
+        }
+
+        if(original.getValueId() != null) {
+            mlpBuilder.valueId(copyReference(original.getValueId()));
+        }
+
+        return mlpBuilder.build();
     }
 
     /**
@@ -193,7 +246,7 @@ public class SubmodelElementCopier {
      * @param original the original Property to be copied
      * @return copied Property
      */
-    private Property copyProperty(DefaultProperty original) {
+    private Property copyProperty(Property original) {
         var propertyBuilder = new DefaultProperty.Builder();
 
         propertyBuilder.idShort(original.getIdShort());
