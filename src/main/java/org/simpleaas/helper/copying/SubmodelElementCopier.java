@@ -52,7 +52,7 @@ public class SubmodelElementCopier {
                 return copyReferenceElement(referenceElement);
             }
             case Capability capability -> {
-
+                return copyCapability(capability);
             }
             case SubmodelElementList submodelElementList -> {
 
@@ -61,16 +61,7 @@ public class SubmodelElementCopier {
 
             }
             case Entity entity -> {
-
-            }
-            case BasicEventElement basicEventElement -> {
-
-            }
-            case Operation operation -> {
-
-            }
-            case OperationVariable operationVariable -> {
-
+                return copyEntity(entity);
             }
             default -> throw new IllegalStateException("Unsupported submodel element sub type: " + original.getClass().getName());
         }
@@ -78,6 +69,58 @@ public class SubmodelElementCopier {
 
     private DataElement copyDataElement(DataElement original) {
 
+    }
+
+    /**
+     * Creates a copy of a Entity.
+     * @param original  the original Entity to be copied
+     * @return copied Entity
+     */
+    private Entity copyEntity(Entity original) {
+        var entityBuilder = new DefaultEntity.Builder();
+
+        entityBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            entityBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        entityBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            entityBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            entityBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            entityBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            entityBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            entityBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                entityBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        entityBuilder.entityType(original.getEntityType());
+
+        for(SubmodelElement statement: original.getStatements()) {
+            SubmodelElementCopier subElemCopier = new SubmodelElementCopier(statement);
+            entityBuilder.statements(subElemCopier.createCopy());
+        }
+
+        return entityBuilder.build();
     }
 
     /**
