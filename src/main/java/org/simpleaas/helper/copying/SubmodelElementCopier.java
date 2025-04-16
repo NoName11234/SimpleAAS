@@ -46,7 +46,7 @@ public class SubmodelElementCopier {
                 return copyBlob(blob);
             }
             case File file -> {
-
+                return copyFile(file);
             }
             case ReferenceElement referenceElement -> {
 
@@ -78,6 +78,55 @@ public class SubmodelElementCopier {
 
     private DataElement copyDataElement(DataElement original) {
 
+    }
+
+    /**
+     * Creates a copy of a File.
+     * @param original the original File to be copied
+     * @return copied File
+     */
+    private File copyFile(File original) {
+        var fileBuilder = new DefaultFile.Builder();
+
+        fileBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            fileBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        fileBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            fileBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            fileBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            fileBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            fileBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            fileBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                fileBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        fileBuilder.contentType(original.getContentType());
+
+        fileBuilder.value(original.getValue());
+
+        return fileBuilder.build();
     }
 
     /**
