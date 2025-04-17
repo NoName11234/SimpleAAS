@@ -89,9 +89,103 @@ public class ContactInformationBuilder1_0 {
                     }
                 }
             } else if(submodelElement instanceof MultiLanguageProperty mlp) {
-
+                for(Key key: mlp.getSemanticId().getKeys()){
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.nationalCode)) {
+                        if(!contactInformation.getNationalCode().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getNationalCode());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.cityTown)) {
+                        if(!contactInformation.getCityTown().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getCityTown());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.company)) {
+                        if(!contactInformation.getCompany().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getCompany());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.department)) {
+                        if(!contactInformation.getDepartment().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getDepartment());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.street)) {
+                        if(!contactInformation.getStreet().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getStreet());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.zipcode)) {
+                        if(!contactInformation.getZipCode().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getZipCode());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.poBox)) {
+                        if(!contactInformation.getPoBox().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getPoBox());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.zipCodeOfPoBox)) {
+                        if(!contactInformation.getZipCodeOfPoBox().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getZipCodeOfPoBox());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.stateCounty)) {
+                        if(!contactInformation.getStateCounty().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getStateCounty());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.nameOfContact)) {
+                        if(!contactInformation.getNameOfContact().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getNameOfContact());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.firstName)) {
+                        if(!contactInformation.getFirstName().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getFirstName());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.middleNames)) {
+                        if(!contactInformation.getMiddleName().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getMiddleName());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.title)) {
+                        if(!contactInformation.getTitle().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getTitle());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.academicTitle)) {
+                        if(!contactInformation.getAcademicTitle().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getAcademicTitle());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.furtherDetailsOfContact)) {
+                        if(!contactInformation.getFurtherDetailsOfContact().isEmpty()) {
+                            addValuesToMlp(mlp, contactInformation.getFurtherDetailsOfContact());
+                        } else {
+                            contactInformationSmc.getValue().remove(mlp);
+                        }
+                    }
+                }
             } else if(submodelElement instanceof SubmodelElementCollection smc) {
+                for(Key key: smc.getSemanticId().getKeys()){
 
+                }
             }
         }
     }
