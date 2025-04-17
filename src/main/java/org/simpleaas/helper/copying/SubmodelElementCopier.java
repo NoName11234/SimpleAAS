@@ -914,7 +914,13 @@ public class SubmodelElementCopier {
      * @return copied LangStringShortNameTypeIec61360
      */
     private LangStringShortNameTypeIec61360 copyLangStringShortNameTypeIec61360(DefaultLangStringShortNameTypeIec61360 original) {
-        
+        var builder = new DefaultLangStringShortNameTypeIec61360.Builder();
+
+        builder.text(original.getText());
+
+        builder.language(original.getLanguage());
+
+        return builder.build();
     }
 
     /**
