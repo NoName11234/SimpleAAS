@@ -113,11 +113,24 @@ public class ContactInformationBuilder1_0 {
     }
 
     private void findTemplateElements() {
+        for(SubmodelElement submodelElement: this.template.getSubmodelElements()) {
+            for(Key key: submodelElement.getSemanticId().getKeys()) {
+                if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.id)) {
+                    this.templateContactInformation = (SubmodelElementCollection) submodelElement;
+                }
+            }
+        }
+
         //mark submodel element collections as template in short ID so they can be identified and removed later
+        this.templateContactInformation.setIdShort("Template-ToBeRemoved");
     }
 
     private void removeTemplateElements(Submodel submodel) {
-
+        for(SubmodelElement submodelElement: submodel.getSubmodelElements()) {
+            if(submodelElement.getIdShort().equals("Template-ToBeRemoved")){
+                submodel.getSubmodelElements().remove(submodelElement);
+            }
+        }
     }
 
     private void addValuesToMlp(MultiLanguageProperty mlp, HashMap<String, String> values) {
