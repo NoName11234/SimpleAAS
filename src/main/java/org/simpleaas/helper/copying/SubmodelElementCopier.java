@@ -55,10 +55,10 @@ public class SubmodelElementCopier {
                 return copyCapability(capability);
             }
             case SubmodelElementList submodelElementList -> {
-                
+                return copySubmodelElementList(submodelElementList);
             }
             case SubmodelElementCollection submodelElementCollection -> {
-                copySubmodelElementCollection(submodelElementCollection);
+                return copySubmodelElementCollection(submodelElementCollection);
             }
             case Entity entity -> {
                 return copyEntity(entity);
@@ -69,6 +69,62 @@ public class SubmodelElementCopier {
 
     private DataElement copyDataElement(DataElement original) {
 
+    }
+
+    /**
+     * Creates a copy of a SubmodelElementList.
+     * @param original  the original SubmodelElementList to be copied
+     * @return copied SubmodelElementList
+     */
+    private SubmodelElementList copySubmodelElementList(SubmodelElementList original) {
+        var smlBuilder = new DefaultSubmodelElementList.Builder();
+
+        smlBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            smlBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        smlBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            smlBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            smlBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            smlBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            smlBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            smlBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                smlBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        smlBuilder.typeValueListElement(original.getTypeValueListElement());
+
+        smlBuilder.valueTypeListElement(original.getValueTypeListElement());
+
+        smlBuilder.orderRelevant(original.getOrderRelevant());
+
+        for(SubmodelElement value: original.getValue()) {
+            SubmodelElementCopier subElemCopier = new SubmodelElementCopier(value);
+            smlBuilder.value(subElemCopier.createCopy());
+        }
+
+        return smlBuilder.build();
     }
 
     /**
