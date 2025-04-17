@@ -25,7 +25,7 @@ public class SubmodelElementCopier {
      * Creates a copy of the original submodel element.
      * @return copied submodel element
      */
-    private SubmodelElement createCopy() {
+    public SubmodelElement createCopy() {
         switch (original) {
             case AnnotatedRelationshipElement annotatedRelationshipElement -> {
                 return copyAnnotatedRelationshipElement(annotatedRelationshipElement);
@@ -714,7 +714,7 @@ public class SubmodelElementCopier {
      * @param original the original Extension to be copied
      * @return copied Extension
      */
-    private Extension copyExtension(DefaultExtension original) {
+    public static Extension copyExtension(Extension original) {
         var builder = new DefaultExtension.Builder();
 
         builder.value(original.getValue());
@@ -743,7 +743,7 @@ public class SubmodelElementCopier {
      * @param original the original LangStringNameType to be copied
      * @return copied LangStringNameType
      */
-    private LangStringNameType copyLangStringNameType(LangStringNameType original) {
+    public static LangStringNameType copyLangStringNameType(LangStringNameType original) {
         var builder = new DefaultLangStringNameType.Builder();
 
         builder.text(original.getText()).language(original.getLanguage());
@@ -756,7 +756,7 @@ public class SubmodelElementCopier {
      * @param original the original LangStringTextType to be copied
      * @return copied LangStringTextType
      */
-    private LangStringTextType copyLangStringTextType(LangStringTextType original) {
+    public static LangStringTextType copyLangStringTextType(LangStringTextType original) {
         var builder = new DefaultLangStringTextType.Builder();
 
         builder.text(original.getText()).language(original.getLanguage());
@@ -769,7 +769,7 @@ public class SubmodelElementCopier {
      * @param original the original Reference to be copied
      * @return copied Reference
      */
-    private Reference copyReference(Reference original) {
+    public static Reference copyReference(Reference original) {
         var builder = new DefaultReference.Builder();
 
         builder.type(original.getType());
@@ -790,7 +790,7 @@ public class SubmodelElementCopier {
      * @param original the original Key to be copied
      * @return copied Key
      */
-    private Key copyKey(Key original) {
+    private static Key copyKey(Key original) {
         var builder = new DefaultKey.Builder();
 
         builder.type(original.getType());
@@ -805,7 +805,7 @@ public class SubmodelElementCopier {
      * @param original the original Qualifier to be copied
      * @return copied Qualifier
      */
-    private Qualifier copyQualifier(Qualifier original) {
+    public static Qualifier copyQualifier(Qualifier original) {
         var builder = new DefaultQualifier.Builder();
 
         builder.type(original.getType());
@@ -836,7 +836,7 @@ public class SubmodelElementCopier {
      * @param original the original EmbeddedDataSpecification to be copied
      * @return copied EmbeddedDataSpecification
      */
-    private EmbeddedDataSpecification copyEmbeddedDataSpecification(EmbeddedDataSpecification original) {
+    public static EmbeddedDataSpecification copyEmbeddedDataSpecification(EmbeddedDataSpecification original) {
         var builder =  new DefaultEmbeddedDataSpecification.Builder();
 
         if(original.getDataSpecificationContent() != null) {
@@ -857,7 +857,7 @@ public class SubmodelElementCopier {
      * @param original the original DataSpecificationIec61360 to be copied
      * @return copied DataSpecificationIec61360
      */
-    private DataSpecificationContent copyDataSpecificationIec61360(DefaultDataSpecificationIec61360 original) {
+    private static DataSpecificationContent copyDataSpecificationIec61360(DefaultDataSpecificationIec61360 original) {
         var builder = new DefaultDataSpecificationIec61360.Builder();
 
         builder.value(original.getValue());
@@ -913,7 +913,7 @@ public class SubmodelElementCopier {
      * @param original the LangStringShortNameTypeIec61360 to be copied
      * @return copied LangStringShortNameTypeIec61360
      */
-    private LangStringShortNameTypeIec61360 copyLangStringShortNameTypeIec61360(DefaultLangStringShortNameTypeIec61360 original) {
+    private static LangStringShortNameTypeIec61360 copyLangStringShortNameTypeIec61360(DefaultLangStringShortNameTypeIec61360 original) {
         var builder = new DefaultLangStringShortNameTypeIec61360.Builder();
 
         builder.text(original.getText());
@@ -928,7 +928,7 @@ public class SubmodelElementCopier {
      * @param original the LangStringPreferredNameTypeIec61360 to be copied
      * @return copied LangStringPreferredNameTypeIec61360
      */
-    private LangStringPreferredNameTypeIec61360 copyLangStringPreferredNameTypeIec61360(DefaultLangStringPreferredNameTypeIec61360 original) {
+    private static LangStringPreferredNameTypeIec61360 copyLangStringPreferredNameTypeIec61360(DefaultLangStringPreferredNameTypeIec61360 original) {
         var builder = new DefaultLangStringPreferredNameTypeIec61360.Builder();
 
         builder.text(original.getText());
@@ -943,7 +943,7 @@ public class SubmodelElementCopier {
      * @param original the LevelType to be copied
      * @return copied LevelType
      */
-    private LevelType copyLevelType(DefaultLevelType original) {
+    private static LevelType copyLevelType(DefaultLevelType original) {
         var builder = new DefaultLevelType.Builder();
 
         builder.max(original.getMax()).min(original.getMin()).nom(original.getNom()).typ(original.getTyp());
@@ -956,7 +956,7 @@ public class SubmodelElementCopier {
      * @param original the LangStringDefinitionTypeIec61360 to be copied
      * @return copied LangStringDefinitionTypeIec61360
      */
-    private LangStringDefinitionTypeIec61360 copyLangStringDefinitionTypeIec61360(DefaultLangStringDefinitionTypeIec61360 original) {
+    private static LangStringDefinitionTypeIec61360 copyLangStringDefinitionTypeIec61360(DefaultLangStringDefinitionTypeIec61360 original) {
         var builder = new DefaultLangStringDefinitionTypeIec61360.Builder();
 
         builder.text(original.getText());
@@ -971,7 +971,7 @@ public class SubmodelElementCopier {
      * @param original the ValueList to be copied
      * @return copied ValueList
      */
-    private ValueList copyValueList(DefaultValueList original) {
+    private static ValueList copyValueList(DefaultValueList original) {
         var builder = new DefaultValueList.Builder();
 
         for(ValueReferencePair valueReferencePair: original.getValueReferencePairs()) {
@@ -988,7 +988,7 @@ public class SubmodelElementCopier {
      * @param original the ValueReferencePair to be copied
      * @return copied ValueReferencePair
      */
-    private ValueReferencePair copyValueReferencePair(DefaultValueReferencePair original) {
+    private static ValueReferencePair copyValueReferencePair(DefaultValueReferencePair original) {
         var builder = new DefaultValueReferencePair.Builder();
 
         builder.value(original.getValue());
