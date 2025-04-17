@@ -55,10 +55,10 @@ public class SubmodelElementCopier {
                 return copyCapability(capability);
             }
             case SubmodelElementList submodelElementList -> {
-
+                
             }
             case SubmodelElementCollection submodelElementCollection -> {
-
+                copySubmodelElementCollection(submodelElementCollection);
             }
             case Entity entity -> {
                 return copyEntity(entity);
@@ -72,7 +72,57 @@ public class SubmodelElementCopier {
     }
 
     /**
-     * Creates a copy of a Entity.
+     * Creates a copy of a SubmodelElementCollection.
+     * @param original  the original SubmodelElementCollection to be copied
+     * @return copied SubmodelElementCollection
+     */
+    private SubmodelElementCollection copySubmodelElementCollection(SubmodelElementCollection original) {
+        var smcBuilder = new DefaultSubmodelElementCollection.Builder();
+
+        smcBuilder.idShort(original.getIdShort());
+
+        for(LangStringNameType displayName: original.getDisplayName()) {
+            smcBuilder.displayName(copyLangStringNameType(displayName));
+        }
+
+        smcBuilder.category(original.getCategory());
+
+        for(LangStringTextType description: original.getDescription()) {
+            smcBuilder.description(copyLangStringTextType(description));
+        }
+
+        if(original.getSemanticId() != null) {
+            smcBuilder.semanticId(copyReference(original.getSemanticId()));
+        }
+
+        for(Reference supplementalSemanticId: original.getSupplementalSemanticIds()) {
+            smcBuilder.supplementalSemanticIds(copyReference(supplementalSemanticId));
+        }
+
+        for(Qualifier qualifier: original.getQualifiers()) {
+            smcBuilder.qualifiers(copyQualifier(qualifier));
+        }
+
+        for(EmbeddedDataSpecification dataSpecification: original.getEmbeddedDataSpecifications()) {
+            smcBuilder.embeddedDataSpecifications(copyEmbeddedDataSpecification(dataSpecification));
+        }
+
+        for(Extension extension: original.getExtensions()) {
+            if(extension instanceof DefaultExtension de) {
+                smcBuilder.extensions(copyExtension(de));
+            }
+        }
+
+        for(SubmodelElement value: original.getValue()) {
+            SubmodelElementCopier subElemCopier = new SubmodelElementCopier(value);
+            smcBuilder.value(subElemCopier.createCopy());
+        }
+
+        return smcBuilder.build();
+    }
+
+    /**
+     * Creates a copy of an Entity.
      * @param original  the original Entity to be copied
      * @return copied Entity
      */
