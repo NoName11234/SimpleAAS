@@ -67,8 +67,33 @@ public class SubmodelElementCopier {
         }
     }
 
+    /**
+     * Creates a copy of a DataElement.
+     * @param original  the original DataElement to be copied
+     * @return copied DataElement
+     */
     private DataElement copyDataElement(DataElement original) {
-
+        switch(original) {
+            case Property property -> {
+                return copyProperty(property);
+            }
+            case MultiLanguageProperty mlp -> {
+                return copyMultiLanguageProperty(mlp);
+            }
+            case Range range -> {
+                return copyRange(range);
+            }
+            case Blob blob -> {
+                return copyBlob(blob);
+            }
+            case File file -> {
+                return copyFile(file);
+            }
+            case ReferenceElement refElem -> {
+                return copyReferenceElement(refElem);
+            }
+            default -> throw new IllegalStateException("Unsupported data element sub type: " + original.getClass().getName());
+        }
     }
 
     /**
@@ -889,7 +914,7 @@ public class SubmodelElementCopier {
      * @return copied LangStringShortNameTypeIec61360
      */
     private LangStringShortNameTypeIec61360 copyLangStringShortNameTypeIec61360(DefaultLangStringShortNameTypeIec61360 original) {
-
+        
     }
 
     /**
