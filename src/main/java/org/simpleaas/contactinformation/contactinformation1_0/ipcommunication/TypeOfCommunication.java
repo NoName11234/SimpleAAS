@@ -12,7 +12,7 @@ public enum TypeOfCommunication {
         this.type = type;
     }
 
-    public String getValue() {
+    public String getSemanticId() {
         return this.type;
     }
 
