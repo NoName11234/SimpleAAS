@@ -187,15 +187,15 @@ public class ContactInformationBuilder1_0 {
                 for(Key key: smc.getSemanticId().getKeys()){
                     if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.id)) {
                         if(contactInformation.getEmail().isPresent()) {
-
+                            addEmail(smc, contactInformation.getEmail().get());
                         } else {
-
+                            contactInformationSmc.getValue().remove(smc);
                         }
                     } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.id)) {
                         if(contactInformation.getFax().isPresent()) {
-
+                            addFax(smc, contactInformation.getFax().get());
                         } else {
-
+                            contactInformationSmc.getValue().remove(smc);
                         }
                     } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.id)) {
                         //remove the submodel element collection for ip communication, the template element will be used
@@ -251,7 +251,25 @@ public class ContactInformationBuilder1_0 {
     }
 
     private void addFax(SubmodelElementCollection faxSmc, Fax fax) {
-
+        for(SubmodelElement submodelElement: faxSmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()) {
+                    if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.typeOfFaxNumber)) {
+                        if(fax.getTypeOfFaxNumber().isPresent()) {
+                            property.setValue(fax.getTypeOfFaxNumber().get().getSemanticId());
+                        } else {
+                            faxSmc.getValue().remove(property);
+                        }
+                    }
+                }
+            } else if (submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()) {
+                    if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.faxNumber)) {
+                        addValuesToMlp(mlp, fax.getFaxNumber());
+                    }
+                }
+            }
+        }
     }
 
     private void addIpCommunication(SubmodelElementCollection ipCommunicationSmc, IpCommunication ipCommunication) {
