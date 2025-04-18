@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class IpCommunication {
+    private String shortId;
     private final String addressOfAdditionalLink;
     private TypeOfCommunication typeOfCommunication = null;
     private HashMap<String, String> availableTime = new HashMap<>();
 
-    public IpCommunication(String addressOfAdditionalLink) {
+    public IpCommunication(String shortId, String addressOfAdditionalLink) {
+        this.shortId = shortId;
         this.addressOfAdditionalLink = addressOfAdditionalLink;
     }
 
@@ -37,5 +39,14 @@ public class IpCommunication {
 
     public HashMap<String, String> getAvailableTime() {
         return availableTime;
+    }
+
+    public String getShortId() {
+        return shortId;
+    }
+
+    public IpCommunication setShortId(String shortId) {
+        this.shortId = shortId;
+        return this;
     }
 }
