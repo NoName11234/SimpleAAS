@@ -70,7 +70,7 @@ public class ContactInformationReader1_0 {
 
         for(SubmodelElement languageSE: languageSEs) {
             Property languageProperty = (Property) languageSE;
-            contactInformation.addLanguage(languageProperty.getValue());
+            contactInformation.addLanguage(languageProperty.getIdShort(), languageProperty.getValue());
         }
 
         //get time zone

@@ -73,9 +73,10 @@ public class ContactInformationBuilder1_0 {
                             SubmodelElementCopier languageCopier = new SubmodelElementCopier(property);
 
                             //create a property for each language string
-                            for(String language: contactInformation.getLanguage()) {
+                            for(String shortId: contactInformation.getLanguage().keySet()) {
                                 Property languageProp = (Property) languageCopier.createCopy();
-                                languageProp.setValue(language);
+                                languageProp.setIdShort(shortId);
+                                languageProp.setValue(contactInformation.getLanguage().get(shortId));
                                 contactInformationSmc.getValue().add(languageProp);
                             }
 

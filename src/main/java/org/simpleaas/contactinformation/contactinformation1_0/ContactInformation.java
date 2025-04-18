@@ -14,7 +14,7 @@ public class ContactInformation {
     private String shortId;
     private RoleOfContactPerson roleOfContactPerson = null;
     private HashMap<String, String> nationalCode = new HashMap<>();
-    private List<String> language = new ArrayList<>();
+    private HashMap<String, String> language = new HashMap<>();
     private String timeZone = null;
     private HashMap<String, String> cityTown = new HashMap<>();
     private HashMap<String, String> company = new HashMap<>();
@@ -63,17 +63,17 @@ public class ContactInformation {
         return this.nationalCode;
     }
 
-    public ContactInformation setLanguage(List<String> language) {
+    public ContactInformation setLanguage(HashMap<String, String> language) {
         this.language = language;
         return this;
     }
 
-    public ContactInformation addLanguage(String language) {
-        this.language.add(language);
+    public ContactInformation addLanguage(String shortId, String language) {
+        this.language.put(shortId, language);
         return this;
     }
 
-    public List<String> getLanguage() {
+    public HashMap<String, String> getLanguage() {
         return this.language;
     }
 
