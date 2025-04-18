@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ContactInformation {
+    private String shortId;
     private RoleOfContactPerson roleOfContactPerson = null;
     private HashMap<String, String> nationalCode = new HashMap<>();
     private List<String> language = new ArrayList<>();
@@ -34,6 +35,10 @@ public class ContactInformation {
     private HashMap<String, String> academicTitle = new HashMap<>();
     private HashMap<String, String> furtherDetailsOfContact = new HashMap<>();
     private String addressOfAdditionalLink = null;
+
+    public ContactInformation(String shortId) {
+        this.shortId = shortId;
+    }
 
     public ContactInformation setRoleOfContactPerson(RoleOfContactPerson roleOfContactPerson) {
         this.roleOfContactPerson = roleOfContactPerson;
@@ -325,5 +330,14 @@ public class ContactInformation {
 
     public Optional<String> getAddressOfAdditionalLink() {
         return Optional.ofNullable(this.addressOfAdditionalLink);
+    }
+
+    public String getShortId() {
+        return shortId;
+    }
+
+    public ContactInformation setShortId(String shortId) {
+        this.shortId = shortId;
+        return this;
     }
 }
