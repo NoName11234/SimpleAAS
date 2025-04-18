@@ -19,7 +19,7 @@ public class ContactInformationBuilder1_0 {
     /**
      * Template submodel of type Contact Information.
      */
-    private Submodel template;
+    private final Submodel template;
 
     private SubmodelElementCollection templateContactInformation;
     private SubmodelElementCollection templateIpCommunication;
@@ -34,6 +34,10 @@ public class ContactInformationBuilder1_0 {
         findTemplateElements();
     }
 
+    /**
+     * Returns a submodel of type contact information with the set values.
+     * @return submodel of type contact information
+     */
     public Submodel createSubmodel() {
         SubmodelCopier copier = new SubmodelCopier(this.template);
 
@@ -44,10 +48,15 @@ public class ContactInformationBuilder1_0 {
         return submodel;
     }
 
+    /**
+     * Adds a contact information submodel element collection with the specified values to the submodel.
+     * @param contactInformation the values for the submodel element collection
+     */
     public void addContactInformation(ContactInformation contactInformation) {
         //create new submodel element collection by using the template elements
         SubmodelElementCopier copier = new SubmodelElementCopier(this.templateContactInformation);
         SubmodelElementCollection contactInformationSmc = (SubmodelElementCollection) copier.createCopy();
+        contactInformationSmc.setIdShort(contactInformation.getShortId());
 
         //map values from contact information data object on created submodel element collection
         for(SubmodelElement submodelElement: contactInformationSmc.getValue()) {
@@ -200,15 +209,18 @@ public class ContactInformationBuilder1_0 {
                     } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.id)) {
                         //remove the submodel element collection for ip communication, the template element will be used
                         contactInformationSmc.getValue().remove(smc);
+                        SubmodelElementCopier ipCommunicationCopier = new SubmodelElementCopier(this.templateIpCommunication);
 
                         for(IpCommunication ipCommunication: contactInformation.getIpCommunications()) {
-
+                            SubmodelElementCollection ipCommunicationSmc = (SubmodelElementCollection) ipCommunicationCopier.createCopy();
+                            contactInformationSmc.getValue().add(ipCommunicationSmc);
+                            addIpCommunication(ipCommunicationSmc, ipCommunication);
                         }
                     } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.id)) {
                         if(contactInformation.getPhone().isPresent()) {
-
+                            addPhone(smc, contactInformation.getPhone().get());
                         } else {
-
+                            contactInformationSmc.getValue().remove(smc);
                         }
                     }
                 }
@@ -216,6 +228,11 @@ public class ContactInformationBuilder1_0 {
         }
     }
 
+    /**
+     * Maps the content of the email data object on the submodel element collection.
+     * @param emailSmc submodel element collection for email data
+     * @param email email data object
+     */
     private void addEmail(SubmodelElementCollection emailSmc, Email email) {
         for(SubmodelElement submodelElement: emailSmc.getValue()) {
             if(submodelElement instanceof Property property) {
@@ -250,6 +267,11 @@ public class ContactInformationBuilder1_0 {
         }
     }
 
+    /**
+     * Maps the content of the fax data object on the submodel element collection.
+     * @param faxSmc submodel element collection for fax data
+     * @param fax fax data object
+     */
     private void addFax(SubmodelElementCollection faxSmc, Fax fax) {
         for(SubmodelElement submodelElement: faxSmc.getValue()) {
             if(submodelElement instanceof Property property) {
@@ -272,14 +294,76 @@ public class ContactInformationBuilder1_0 {
         }
     }
 
+    /**
+     * Maps the content of the IP communication data object on the submodel element collection.
+     * @param ipCommunicationSmc submodel element collection for IP communication data
+     * @param ipCommunication IP communication data object
+     */
     private void addIpCommunication(SubmodelElementCollection ipCommunicationSmc, IpCommunication ipCommunication) {
-
+        for(SubmodelElement submodelElement: ipCommunicationSmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.addressOfAdditionalLink)) {
+                        property.setValue(ipCommunication.getAddressOfAdditionalLink());
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.typeOfCommunication)) {
+                        if(ipCommunication.getTypeOfCommunication().isPresent()) {
+                            property.setValue(ipCommunication.getTypeOfCommunication().get().getSemanticId());
+                        } else {
+                            ipCommunicationSmc.getValue().remove(property);
+                        }
+                    }
+                }
+            } else if(submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.availableTime)) {
+                        if(!ipCommunication.getAvailableTime().isEmpty()) {
+                            addValuesToMlp(mlp, ipCommunication.getAvailableTime());
+                        } else {
+                            ipCommunicationSmc.getValue().remove(mlp);
+                        }
+                    }
+                }
+            }
+        }
     }
 
+    /**
+     * Maps the content of the phone data object on the submodel element collection.
+     * @param phoneSmc submodel element collection for phone data
+     * @param phone phone data object
+     */
     private void addPhone(SubmodelElementCollection phoneSmc, Phone phone) {
-
+        for(SubmodelElement submodelElement: phoneSmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.typeOfTelephone)) {
+                        if(phone.getTypeOfTelephone().isPresent()) {
+                            property.setValue(phone.getTypeOfTelephone().get().getSemanticId());
+                        } else {
+                            phoneSmc.getValue().remove(property);
+                        }
+                    }
+                }
+            } else if(submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.telephoneNumber)) {
+                        addValuesToMlp(mlp, phone.getTelephoneNumber());
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.availableTime)) {
+                        if(!phone.getAvailableTime().isEmpty()) {
+                            addValuesToMlp(mlp, phone.getAvailableTime());
+                        } else {
+                            phoneSmc.getValue().remove(mlp);
+                        }
+                    }
+                }
+            }
+        }
     }
 
+    /**
+     * Checks the template submodel for template elements and saves the references in the builder attributes.
+     * Where necessary the template elements get marked by using their short ID, so they can be removed later.
+     */
     private void findTemplateElements() {
         for(SubmodelElement submodelElement: this.template.getSubmodelElements()) {
             for(Key key: submodelElement.getSemanticId().getKeys()) {
@@ -295,6 +379,10 @@ public class ContactInformationBuilder1_0 {
         this.templateContactInformation.setIdShort("Template-ToBeRemoved");
     }
 
+    /**
+     * Removes template elements from the given submodel by checking the short IDs of the elements.
+     * @param submodel the submodel to remove the template elements from
+     */
     private void removeTemplateElements(Submodel submodel) {
         for(SubmodelElement submodelElement: submodel.getSubmodelElements()) {
             if(submodelElement.getIdShort().equals("Template-ToBeRemoved")){
@@ -303,6 +391,11 @@ public class ContactInformationBuilder1_0 {
         }
     }
 
+    /**
+     * Adds the values of the given HashMap to the specified MultiLanguageProperty.
+     * @param mlp the MultiLanguageProperty
+     * @param values the values to add
+     */
     private void addValuesToMlp(MultiLanguageProperty mlp, HashMap<String, String> values) {
         for(String language: values.keySet()) {
             mlp.getValue().add(
