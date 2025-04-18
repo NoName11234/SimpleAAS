@@ -22,6 +22,7 @@ public class ContactInformationBuilder1_0 {
     private Submodel template;
 
     private SubmodelElementCollection templateContactInformation;
+    private SubmodelElementCollection templateIpCommunication;
 
     /**
      * @param submodel the template submodel which shall be used by the builder class
@@ -184,25 +185,80 @@ public class ContactInformationBuilder1_0 {
                 }
             } else if(submodelElement instanceof SubmodelElementCollection smc) {
                 for(Key key: smc.getSemanticId().getKeys()){
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.id)) {
+                        if(contactInformation.getEmail().isPresent()) {
 
+                        } else {
+
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.id)) {
+                        if(contactInformation.getFax().isPresent()) {
+
+                        } else {
+
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.id)) {
+                        //remove the submodel element collection for ip communication, the template element will be used
+                        contactInformationSmc.getValue().remove(smc);
+
+                        for(IpCommunication ipCommunication: contactInformation.getIpCommunications()) {
+
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.id)) {
+                        if(contactInformation.getPhone().isPresent()) {
+
+                        } else {
+
+                        }
+                    }
                 }
             }
         }
     }
 
-    private void addEmail(Email email) {
+    private void addEmail(SubmodelElementCollection emailSmc, Email email) {
+        for(SubmodelElement submodelElement: emailSmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()){
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.emailAddress)) {
+                        property.setValue(email.getEmailAddress());
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.typeOfEmailAddress)) {
+                        if(email.getTypeOfEmailAddress().isPresent()) {
+                            property.setValue(email.getTypeOfEmailAddress().get().getSemanticId());
+                        } else {
+                            emailSmc.getValue().remove(property);
+                        }
+                    }
+                }
+            } else if (submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()){
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.publicKey)) {
+                        if(!email.getPublicKey().isEmpty()) {
+                            addValuesToMlp(mlp, email.getPublicKey());
+                        } else {
+                            emailSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.typeOfPublicKey)) {
+                        if(!email.getTypeOfPublicKey().isEmpty()) {
+                            addValuesToMlp(mlp, email.getTypeOfPublicKey());
+                        } else {
+                            emailSmc.getValue().remove(mlp);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void addFax(SubmodelElementCollection faxSmc, Fax fax) {
 
     }
 
-    private void addFax(Fax fax) {
+    private void addIpCommunication(SubmodelElementCollection ipCommunicationSmc, IpCommunication ipCommunication) {
 
     }
 
-    private void addIpCommunication(IpCommunication ipCommunication) {
-
-    }
-
-    private void addPhone(Phone phone) {
+    private void addPhone(SubmodelElementCollection phoneSmc, Phone phone) {
 
     }
 
@@ -211,6 +267,8 @@ public class ContactInformationBuilder1_0 {
             for(Key key: submodelElement.getSemanticId().getKeys()) {
                 if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.id)) {
                     this.templateContactInformation = (SubmodelElementCollection) submodelElement;
+                } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.id)) {
+                    this.templateIpCommunication = (SubmodelElementCollection) submodelElement;
                 }
             }
         }
