@@ -41,7 +41,7 @@ public class ContactInformationReader1_0 {
     }
 
     private ContactInformation getContactInformation(SubmodelElementCollection contactInformationSmc) {
-        ContactInformation contactInformation = new ContactInformation();
+        ContactInformation contactInformation = new ContactInformation(contactInformationSmc.getIdShort());
 
         //get role of contact person
         List<SubmodelElement> roleOfContactPersonSEs = getSubmodelElements(ContactInformationConstants.ContactInformations1_0.ContactInformation.roleOfContactPerson, contactInformationSmc.getValue());
@@ -405,7 +405,7 @@ public class ContactInformationReader1_0 {
         }
 
         //map on ip communication
-        IpCommunication ipCommunication = new IpCommunication(additionalAddress);
+        IpCommunication ipCommunication = new IpCommunication(smc.getIdShort(), additionalAddress);
 
         if(optTypeOfCommunication.isPresent()) {
             ipCommunication.setTypeOfCommunication(optTypeOfCommunication.get());
