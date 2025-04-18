@@ -73,8 +73,54 @@ public class ContactInformationTester1_0 {
     private List<String> checkContactInformationCollection(SubmodelElementCollection contactInformation) {
         List<String> errors = new ArrayList<>();
 
-        //check role of contact person
         List<Property> roleOfContactPersons = new ArrayList<>();
+        List<MultiLanguageProperty> nationalCodes = new ArrayList<>();
+        List<Property> languages = new ArrayList<>();
+        List<Property> timeZones = new ArrayList<>();
+        List<MultiLanguageProperty> cityTowns = new ArrayList<>();
+        List<MultiLanguageProperty> companies = new ArrayList<>();
+        List<MultiLanguageProperty> departments = new ArrayList<>();
+        List<SubmodelElementCollection> phones = new ArrayList<>();
+        List<SubmodelElementCollection> faxes = new ArrayList<>();
+        List<SubmodelElementCollection> emails = new ArrayList<>();
+        List<SubmodelElementCollection> ipCommunications = new ArrayList<>();
+        List<MultiLanguageProperty> streets = new ArrayList<>();
+        List<MultiLanguageProperty> zipCodes = new ArrayList<>();
+        List<MultiLanguageProperty> poBoxes = new ArrayList<>();
+        List<MultiLanguageProperty> zipCodeOfPoBoxes = new ArrayList<>();
+        List<MultiLanguageProperty> stateCounty = new ArrayList<>();
+        List<MultiLanguageProperty> nameOfContacts = new ArrayList<>();
+        List<MultiLanguageProperty> firstNames = new ArrayList<>();
+        List<MultiLanguageProperty> middleNames = new ArrayList<>();
+        List<MultiLanguageProperty> titles = new ArrayList<>();
+        List<MultiLanguageProperty> academicTitles = new ArrayList<>();
+        List<MultiLanguageProperty> furtherDetailsOfContacts = new ArrayList<>();
+        List<Property> addressOfAdditionalLinks = new ArrayList<>();
+
+        for(SubmodelElement submodelElement: contactInformation.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.roleOfContactPerson)) {
+
+                    } else {
+                        //add error because semantic ID could not be identified
+                    }
+                }
+            } else if(submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()) {
+
+                }
+            } else if(submodelElement instanceof SubmodelElementCollection smc) {
+                for(Key key: smc.getSemanticId().getKeys()) {
+
+                }
+            } else {
+                //add error because this submodel element collection should not contain this submodel element type
+            }
+        }
+
+        //check role of contact person
+        /*List<Property> roleOfContactPersons = new ArrayList<>();
 
         List<SubmodelElement> roleOfContactPersonSEs = contactInformation.getValue().stream()
                 .filter(se -> compareSemanticId(se.getSemanticId(), ContactInformationConstants.ContactInformations1_0.ContactInformation.roleOfContactPerson))
@@ -113,7 +159,8 @@ public class ContactInformationTester1_0 {
         //check the cardinality of national code
         if(nationalCodes.size() > 1) {
             errors.add("There are " + nationalCodes.size() + " instances of submodel element national code instead of 0-1.");
-        }
+        }*/
+
 
         return errors;
     }
