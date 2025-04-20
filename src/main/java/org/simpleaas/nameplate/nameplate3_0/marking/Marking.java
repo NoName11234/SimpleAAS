@@ -1,5 +1,7 @@
 package org.simpleaas.nameplate.nameplate3_0.marking;
 
+import org.simpleaas.helper.FileModel;
+
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -26,7 +28,7 @@ public class Marking {
     /**
      * Conformity symbol of the marking as image.
      */
-    private final MarkingFile markingFile;
+    private final FileModel markingFile;
     /**
      * Additional information for the marking in plain text.
      * The key is the short ID used for the property.
@@ -37,7 +39,7 @@ public class Marking {
      * @param markingName the name of the marking
      * @param markingFile conformity symbol of the marking
      */
-    public Marking(String markingName, MarkingFile markingFile) {
+    public Marking(String markingName, FileModel markingFile) {
         this.markingName = markingName;
         this.markingFile = markingFile;
     }
@@ -73,7 +75,7 @@ public class Marking {
         return Optional.ofNullable(this.expiryDate);
     }
 
-    public MarkingFile getMarkingFile() {
+    public FileModel getMarkingFile() {
         return this.markingFile;
     }
 
