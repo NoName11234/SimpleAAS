@@ -120,6 +120,56 @@ public class NameplateConstants {
     }
 
     public static class Nameplate3_0 {
+        public static String id = "https://admin-shell.io/idta/nameplate/3/0/Nameplate";
+        public static String uriOfTheProduct = "0112/2///61987#ABN590#002";
+        public static String manufacturerName = "0112/2///61987#ABA565#009";
+        public static String manufacturerProductDesignation = "0112/2///61987#ABA567#009";
+        public static String manufacturerProductRoot = "0112/2///61360_7#AAS011#001";
+        public static String manufacturerProductFamily = "0112/2///61987#ABP464#002";
+        public static String manufacturerProductType = "0112/2///61987#ABA300#008";
+        public static String orderCodeOfManufacturer = "0112/2///61987#ABA950#008";
+        public static String productArticleNumberOfManufacturer = "0112/2///61987#ABA581#007";
+        public static String serialNumber = "0112/2///61987#ABA951#009";
+        public static String yearOfConstruction = "0112/2///61987#ABP000#002";
+        public static String dateOfManufacture = "0112/2///61987#ABB757#007";
+        public static String hardwareVersion = "0112/2///61987#ABA926#008";
+        public static String firmwareVersion = "0112/2///61987#ABA302#006";
+        public static String softwareVersion = "0112/2///61987#ABA601#008";
+        public static String countryOfOrigin = "0112/2///61987#ABP462#001";
+        public static String uniqueFacilityIdentifier = "https://admin-shell.io/idta/nameplate/3/0/UniqueFacilityIdentifier";
+        public static String companyLogo = "0112/2///61987#ABP463#001";
 
+        public static class Markings {
+            public static String id = "0112/2///61360_7#AAS006#001";
+
+            public static class Marking {
+                public static String id = "0112/2///61360_7#AAS009#001";
+                public static String markingName = "0112/2///61987#ABA231#009";
+                public static String designationOfCertificateOrApproval = "0112/2///61987#ABH783#003";
+                public static String issueDate = "0112/2///61987#ABO097#001";
+                public static String expiryDate = "0112/2///61987#ABH830#002";
+                public static String markingFile = "0112/2///61987#ABO100#002";
+                public static String markingAdditionalText = "0112/2///61987#ABB146#007";
+            }
+        }
+
+        public static class AssetSpecificProperties  {
+            public static String id = "0173-1#02-ABI218#003/0173-1#01-AGZ672#004";
+            public static String arbitraryProperty = "https://admin-shell.io/SMT/General/ArbitraryProp";
+            public static String arbitraryMlp = "https://admin-shell.io/SMT/General/ArbitraryMLP";
+            public static String arbitraryFile = "https://admin-shell.io/SMT/General/ArbitraryFile";
+
+            public static class GuidelineSpecificProperties {
+                public static String id = "0173-1#02-ABI219#003/0173-1#01-AHD205#004";
+
+                public static class GuidelineSpecificProperty {
+                    public static String id = "0173-1#01-AHD205#004";
+                    public static String guidelineForConformityDeclaration = "0173-1#02-AAO856#002";
+                    public static String arbitraryProperty = "https://admin-shell.io/SMT/General/ArbitraryProp";
+                    public static String arbitraryFile = "https://admin-shell.io/SMT/General/ArbitraryFile";
+                    public static String arbitraryMlp = "https://admin-shell.io/SMT/General/ArbitraryMLP";
+                }
+            }
+        }
     }
 }
