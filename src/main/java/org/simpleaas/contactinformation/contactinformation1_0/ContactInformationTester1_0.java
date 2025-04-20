@@ -73,6 +73,7 @@ public class ContactInformationTester1_0 {
     private List<String> checkContactInformationCollection(SubmodelElementCollection contactInformation) {
         List<String> errors = new ArrayList<>();
 
+        //collect submodel elements by their type and semantic ID
         List<Property> roleOfContactPersons = new ArrayList<>();
         List<MultiLanguageProperty> nationalCodes = new ArrayList<>();
         List<Property> languages = new ArrayList<>();
@@ -101,66 +102,77 @@ public class ContactInformationTester1_0 {
             if(submodelElement instanceof Property property) {
                 for(Key key: property.getSemanticId().getKeys()) {
                     if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.roleOfContactPerson)) {
-
+                        roleOfContactPersons.add(property);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.language)) {
+                        languages.add(property);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.timeZone)) {
+                        timeZones.add(property);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.addressOfAdditionalLink)) {
+                        addressOfAdditionalLinks.add(property);
                     } else {
                         //add error because semantic ID could not be identified
+                        errors.add("Property with unknown semantic ID found: " + key.getValue());
                     }
                 }
             } else if(submodelElement instanceof MultiLanguageProperty mlp) {
                 for(Key key: mlp.getSemanticId().getKeys()) {
-
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.nationalCode)) {
+                        nationalCodes.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.cityTown)) {
+                        cityTowns.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.company)) {
+                        companies.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.department)) {
+                        departments.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.street)) {
+                        streets.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.zipcode)) {
+                        zipCodes.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.poBox)) {
+                        poBoxes.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.zipCodeOfPoBox)) {
+                        zipCodeOfPoBoxes.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.stateCounty)) {
+                        stateCounty.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.nameOfContact)) {
+                        nameOfContacts.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.firstName)) {
+                        firstNames.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.middleNames)) {
+                        middleNames.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.title)) {
+                        titles.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.academicTitle)) {
+                        academicTitles.add(mlp);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.furtherDetailsOfContact)) {
+                        furtherDetailsOfContacts.add(mlp);
+                    } else {
+                        //add error because semantic ID could not be identified
+                        errors.add("Multilanguage property with unknown semantic ID found: " + key.getValue());
+                    }
                 }
             } else if(submodelElement instanceof SubmodelElementCollection smc) {
                 for(Key key: smc.getSemanticId().getKeys()) {
-
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.id)) {
+                        phones.add(smc);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.id)) {
+                        faxes.add(smc);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.id)) {
+                        emails.add(smc);
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.id)) {
+                        ipCommunications.add(smc);
+                    } else {
+                        //add error beacuse semantic ID could not be identified
+                        errors.add("Submodel element collection with unknown semantic ID found: " + key.getValue());
+                    }
                 }
             } else {
                 //add error because this submodel element collection should not contain this submodel element type
+                errors.add("Submodel element found, which type is not part of the submodel standard: " + submodelElement.getClass().getName());
             }
         }
 
-        //check role of contact person
-        /*List<Property> roleOfContactPersons = new ArrayList<>();
-
-        List<SubmodelElement> roleOfContactPersonSEs = contactInformation.getValue().stream()
-                .filter(se -> compareSemanticId(se.getSemanticId(), ContactInformationConstants.ContactInformations1_0.ContactInformation.roleOfContactPerson))
-                .toList();
-
-        //check whether submodel elements are from type property
-        for(SubmodelElement roleOfContactPersonSE: roleOfContactPersonSEs) {
-            if(roleOfContactPersonSE instanceof Property p) {
-                roleOfContactPersons.add(p);
-            } else {
-                errors.add("Submodel element " + roleOfContactPersonSE.getIdShort() + " with role of contact person data is from type " + roleOfContactPersonSE.getClass().getName() + " instead of type Property.");
-            }
-        }
-
-        //check the cardinality of role of contact person
-        if(roleOfContactPersons.size() > 1) {
-            errors.add("There are " + roleOfContactPersons.size() + " instances of submodel element role of contact person instead of 0-1.");
-        }
-
-        //check national code
-        List<MultiLanguageProperty> nationalCodes = new ArrayList<>();
-
-        List<SubmodelElement> nationalCodeSEs = contactInformation.getValue().stream()
-                .filter(se -> compareSemanticId(se.getSemanticId(), ContactInformationConstants.ContactInformations1_0.ContactInformation.nationalCode))
-                .toList();
-
-        //check whether submodel elements are from type multilanguage property
-        for(SubmodelElement nationalCodeSE: nationalCodeSEs) {
-            if(nationalCodeSE instanceof MultiLanguageProperty mlp) {
-                nationalCodes.add(mlp);
-            } else {
-                errors.add("Submodel element " + nationalCodeSE.getIdShort() + " with national code data is from type " + nationalCodeSE.getClass().getName() + " instead of type MultiLanguageProperty");
-            }
-        }
-
-        //check the cardinality of national code
-        if(nationalCodes.size() > 1) {
-            errors.add("There are " + nationalCodes.size() + " instances of submodel element national code instead of 0-1.");
-        }*/
-
+        
 
         return errors;
     }
