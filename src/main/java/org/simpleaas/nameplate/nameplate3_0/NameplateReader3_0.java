@@ -6,6 +6,7 @@ import org.simpleaas.contactinformation.contactinformation1_0.ContactInformation
 import org.simpleaas.helper.FileModel;
 import org.simpleaas.nameplate.NameplateConstants;
 import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.AssetSpecificProperty;
+import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.GuidelineSpecificProperty;
 import org.simpleaas.nameplate.nameplate3_0.marking.Marking;
 
 import java.util.HashMap;
@@ -92,11 +93,70 @@ public class NameplateReader3_0 {
     }
 
     public HashMap<String, Marking> getMarkings() {
-        
+        Optional<SubmodelElementCollection> optMarkings = getSmc(this.submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.Markings.id);
+
+        if(optMarkings.isEmpty()) {
+            return new HashMap<>();
+        }
+
+        List<SubmodelElementCollection> markingSmcs = optMarkings.get().getValue().stream()
+                .filter(se -> se instanceof SubmodelElementCollection)
+                .map(se -> ((SubmodelElementCollection)se))
+                .filter(smc -> compareSemanticId(smc.getSemanticId(), NameplateConstants.Nameplate3_0.Markings.Marking.id))
+                .toList();
+
+        HashMap<String, Marking> markings = new HashMap<>();
+
+        for(SubmodelElementCollection markingSmc: markingSmcs) {
+            markings.put(markingSmc.getIdShort(), mapMarking(markingSmc));
+        }
+
+        return markings;
     }
 
     public HashMap<String, AssetSpecificProperty> getAssetSpecificProperties() {
 
+    }
+
+    private AssetSpecificProperty mapAssetSpecificProperty(SubmodelElementCollection assetSpecificPropertySmc) {
+
+    }
+
+    private GuidelineSpecificProperty mapGuidelineSpecificProperty(SubmodelElementCollection guidelineSpecificPropertySmc) {
+        
+    }
+
+    private Marking mapMarking(SubmodelElementCollection markingSmc) {
+        Property markingName = markingSmc.getValue().stream()
+                .filter(se -> se instanceof Property)
+                .map(se -> ((Property)se))
+                .filter(p -> compareSemanticId(p.getSemanticId(), NameplateConstants.Nameplate3_0.Markings.Marking.markingName))
+                .findAny().get();
+
+        File markingFile = markingSmc.getValue().stream()
+                .filter(se -> se instanceof File)
+                .map(se -> ((File)se))
+                .filter(f -> compareSemanticId(f.getSemanticId(), NameplateConstants.Nameplate3_0.Markings.Marking.markingFile))
+                .findAny().get();
+
+
+        Marking marking = new Marking(markingName.getValue(), new FileModel(markingFile.getValue(), markingFile.getContentType()));
+
+        for(SubmodelElement markingElement: markingSmc.getValue()) {
+            if(markingElement instanceof Property property) {
+                if(compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.Markings.Marking.designationOfCertificateOrApproval)) {
+                    marking.setDesignation(property.getValue());
+                } else if (compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.Markings.Marking.issueDate)) {
+                    marking.setIssueDate(property.getValue());
+                } else if (compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.Markings.Marking.expiryDate)) {
+                    marking.setExpiryDate(property.getValue());
+                } else if (compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.Markings.Marking.markingAdditionalText)) {
+                    marking.addMarkingAdditionalText(property.getIdShort(), property.getValue());
+                }
+            }
+        }
+
+        return marking;
     }
 
     private boolean compareSemanticId(Reference reference, String semanticId) {
