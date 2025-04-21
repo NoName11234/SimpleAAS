@@ -124,6 +124,7 @@ public class NameplateConstants {
         public static String uriOfTheProduct = "0112/2///61987#ABN590#002";
         public static String manufacturerName = "0112/2///61987#ABA565#009";
         public static String manufacturerProductDesignation = "0112/2///61987#ABA567#009";
+        public static String addressInformation = "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/AddressInformation";
         public static String manufacturerProductRoot = "0112/2///61360_7#AAS011#001";
         public static String manufacturerProductFamily = "0112/2///61987#ABP464#002";
         public static String manufacturerProductType = "0112/2///61987#ABA300#008";
