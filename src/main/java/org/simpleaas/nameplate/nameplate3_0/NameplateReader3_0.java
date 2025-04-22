@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static org.simpleaas.helper.ElementUtils.*;
+
 public class NameplateReader3_0 {
     private final Submodel submodel;
 
@@ -210,60 +212,5 @@ public class NameplateReader3_0 {
         }
 
         return marking;
-    }
-
-    private boolean compareSemanticId(Reference reference, String semanticId) {
-        for(Key key: reference.getKeys()) {
-            if(key.getValue().equals(semanticId)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private Optional<String> getPropertyValue(List<SubmodelElement> elements, String semanticId) {
-        return elements.stream()
-                .filter(se -> se instanceof Property)
-                .map(se -> ((Property)se))
-                .filter(p -> compareSemanticId(p.getSemanticId(), semanticId))
-                .map(Property::getValue)
-                .findAny();
-    }
-
-    private HashMap<String, String> getMlpValue(List<SubmodelElement> elements, String semanticId) {
-        return elements.stream()
-                .filter(se -> se instanceof MultiLanguageProperty)
-                .map(se -> ((MultiLanguageProperty)se))
-                .filter(mlp -> compareSemanticId(mlp.getSemanticId(), semanticId))
-                .map(this::convertMlp)
-                .findAny().orElse(new HashMap<>());
-    }
-
-    private Optional<SubmodelElementCollection> getSmc(List<SubmodelElement> elements, String semanticId) {
-        return elements.stream()
-                .filter(se -> se instanceof SubmodelElementCollection)
-                .map(se -> ((SubmodelElementCollection)se))
-                .filter(smc -> compareSemanticId(smc.getSemanticId(), semanticId))
-                .findAny();
-    }
-
-    private Optional<FileModel> getFileModel(List<SubmodelElement> elements, String semanticId) {
-        return elements.stream()
-                .filter(se -> se instanceof File)
-                .map(se -> ((File)se))
-                .filter(f -> compareSemanticId(f.getSemanticId(), semanticId))
-                .map(f -> new FileModel(f.getValue(), f.getContentType()))
-                .findAny();
-    }
-
-    private HashMap<String, String> convertMlp(MultiLanguageProperty mlp) {
-        HashMap<String, String> values = new HashMap<>();
-
-        for(LangStringTextType value: mlp.getValue()) {
-            values.put(value.getLanguage(), value.getText());
-        }
-
-        return values;
     }
 }
