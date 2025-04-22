@@ -114,16 +114,39 @@ public class NameplateReader3_0 {
         return markings;
     }
 
-    public HashMap<String, AssetSpecificProperty> getAssetSpecificProperties() {
+    public AssetSpecificProperty getAssetSpecificProperties() {
+        Optional<SubmodelElementCollection> optAssetSpecificPropSmc = getSmc(this.submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.id);
+        AssetSpecificProperty assetSpecificProperty = new AssetSpecificProperty();
 
+        if(optAssetSpecificPropSmc.isEmpty()) {
+            return assetSpecificProperty;
+        }
+
+        for(SubmodelElement submodelElement: optAssetSpecificPropSmc.get().getValue()) {
+            if(submodelElement instanceof Property property) {
+                if(compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryProperty)) {
+                    assetSpecificProperty.addArbitraryProperty(property.getIdShort(), property.getValue());
+                }
+            } else if (submodelElement instanceof MultiLanguageProperty mlp) {
+                if(compareSemanticId(mlp.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryMlp)) {
+                    assetSpecificProperty.addArbitraryMlp(mlp.getIdShort(), convertMlp(mlp));
+                }
+            } else if (submodelElement instanceof File file) {
+                if(compareSemanticId(file.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryFile)) {
+                    assetSpecificProperty.addArbitraryFile(file.getIdShort(), new FileModel(file.getValue(), file.getContentType()));
+                }
+            } else if (submodelElement instanceof SubmodelElementList sml) {
+                if(compareSemanticId(sml.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.id)) {
+                    assetSpecificProperty.addGuidelineSpecificProperty(sml.getIdShort(), mapGuidelineSpecificProperty(sml));
+                }
+            }
+        }
+
+        return assetSpecificProperty;
     }
 
-    private AssetSpecificProperty mapAssetSpecificProperty(SubmodelElementCollection assetSpecificPropertySmc) {
+    private GuidelineSpecificProperty mapGuidelineSpecificProperty(SubmodelElementList guidelineSpecificPropertySml) {
 
-    }
-
-    private GuidelineSpecificProperty mapGuidelineSpecificProperty(SubmodelElementCollection guidelineSpecificPropertySmc) {
-        
     }
 
     private Marking mapMarking(SubmodelElementCollection markingSmc) {
