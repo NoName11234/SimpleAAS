@@ -137,7 +137,13 @@ public class NameplateReader3_0 {
                 }
             } else if (submodelElement instanceof SubmodelElementList sml) {
                 if(compareSemanticId(sml.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.id)) {
-                    assetSpecificProperty.addGuidelineSpecificProperty(sml.getIdShort(), mapGuidelineSpecificProperty(sml));
+                    for(SubmodelElement guidelineSpecificElem: sml.getValue()) {
+                        if(guidelineSpecificElem instanceof SubmodelElementCollection smc) {
+                            if(compareSemanticId(smc.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.id)) {
+                                assetSpecificProperty.addGuidelineSpecificProperty(smc.getIdShort(), mapGuidelineSpecificProperty(smc));
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -145,8 +151,32 @@ public class NameplateReader3_0 {
         return assetSpecificProperty;
     }
 
-    private GuidelineSpecificProperty mapGuidelineSpecificProperty(SubmodelElementList guidelineSpecificPropertySml) {
+    private GuidelineSpecificProperty mapGuidelineSpecificProperty(SubmodelElementCollection guidelineSpecificPropertySmc) {
+        Property guidelineForConformityDeclaration = guidelineSpecificPropertySmc.getValue().stream()
+                .filter(se -> se instanceof Property)
+                .map(se -> ((Property)se))
+                .filter(p -> compareSemanticId(p.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.guidelineForConformityDeclaration))
+                .findAny().get();
 
+        GuidelineSpecificProperty guidelineSpecificProperty = new GuidelineSpecificProperty(guidelineForConformityDeclaration.getValue());
+
+        for (SubmodelElement submodelElement: guidelineSpecificPropertySmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                if(compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryProperty)) {
+                    guidelineSpecificProperty.addArbitraryProperty(property.getIdShort(), property.getValue());
+                }
+            } else if(submodelElement instanceof MultiLanguageProperty mlp) {
+                if(compareSemanticId(mlp.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryMlp)) {
+                    guidelineSpecificProperty.addArbitraryMlp(mlp.getIdShort(), convertMlp(mlp));
+                }
+            } else if(submodelElement instanceof File file) {
+                if(compareSemanticId(file.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryFile)) {
+                    guidelineSpecificProperty.addArbitraryFile(file.getIdShort(), new FileModel(file.getValue(), file.getContentType()));
+                }
+            }
+        }
+
+        return guidelineSpecificProperty;
     }
 
     private Marking mapMarking(SubmodelElementCollection markingSmc) {
