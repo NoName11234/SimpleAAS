@@ -6,6 +6,7 @@ public class NameplateConstants {
         public static String uriOfTheProduct = "0173-1#02-AAY811#001";
         public static String manufacturerName = "0173-1#02-AAO677#002";
         public static String manufacturerProductDesignation = "0173-1#02-AAW338#001";
+        public static String contactInformation = "https://adminshell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation";
         public static String manufacturerProductRoot = "0173-1#02-AAU732#001";
         public static String manufacturerProductFamily = "0173-1#02-AAU731#001";
         public static String manufacturerProductType = "0173-1#02-AAO057#002";
