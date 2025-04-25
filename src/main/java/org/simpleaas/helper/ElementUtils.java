@@ -7,6 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class ElementUtils {
+    public static List<Property> getPropertyValues(List<SubmodelElement> elements, String semanticId) {
+        return elements.stream()
+                .filter(se -> se instanceof Property)
+                .map(se -> ((Property)se))
+                .filter(p -> compareSemanticId(p.getSemanticId(), semanticId))
+                .toList();
+    }
+
     public static Optional<String> getPropertyValue(List<SubmodelElement> elements, String semanticId) {
         return elements.stream()
                 .filter(se -> se instanceof Property)
