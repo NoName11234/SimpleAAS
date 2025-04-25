@@ -1,19 +1,22 @@
 package org.simpleaas.nameplate.nameplate2_0.assetspecificproperty;
 
+import org.eclipse.digitaltwin.aas4j.v3.model.Property;
 import org.simpleaas.nameplate.nameplate2_0.assetspecificproperty.guidelinespecificproperty.GuidelineSpecificPropertyCollection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AssetSpecificPropertyCollection {
-    private final HashMap<String, String> arbitraryProperties = new HashMap<>();
+    private final List<Property> arbitraryProperties = new ArrayList<>();
     private final HashMap<String, GuidelineSpecificPropertyCollection> guidelineSpecificPropertyCollections = new HashMap<>();
 
-    public AssetSpecificPropertyCollection addArbitraryProperty(String shortId, String value) {
-        this.arbitraryProperties.put(shortId, value);
+    public AssetSpecificPropertyCollection addArbitraryProperty(Property property) {
+        this.arbitraryProperties.add(property);
         return this;
     }
 
-    public HashMap<String, String> getArbitraryProperties() {
+    public List<Property> getArbitraryProperties() {
         return this.arbitraryProperties;
     }
 
