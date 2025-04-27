@@ -84,6 +84,14 @@ public class ElementUtils {
                 .toList();
     }
 
+    public static Optional<ReferenceElement> getReferenceElement(List<SubmodelElement> elements, String semanticId) {
+        return elements.stream()
+                .filter(se -> se instanceof ReferenceElement)
+                .map(se -> ((ReferenceElement)se))
+                .filter(re -> compareSemanticId(re.getSemanticId(), semanticId))
+                .findAny();
+    }
+
     public static boolean compareSemanticId(Reference reference, String semanticId) {
         for(Key key: reference.getKeys()) {
             if(key.getValue().equals(semanticId)) {
