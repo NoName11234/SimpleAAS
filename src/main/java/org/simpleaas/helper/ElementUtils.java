@@ -51,6 +51,14 @@ public class ElementUtils {
                 .findAny();
     }
 
+    public static List<SubmodelElementCollection> getSmcs(List<SubmodelElement> elements, String semanticId) {
+        return elements.stream()
+                .filter(se -> se instanceof SubmodelElementCollection)
+                .map(se -> ((SubmodelElementCollection)se))
+                .filter(smc -> compareSemanticId(smc.getSemanticId(), semanticId))
+                .toList();
+    }
+
     public static boolean compareSemanticId(Reference reference, String semanticId) {
         for(Key key: reference.getKeys()) {
             if(key.getValue().equals(semanticId)) {

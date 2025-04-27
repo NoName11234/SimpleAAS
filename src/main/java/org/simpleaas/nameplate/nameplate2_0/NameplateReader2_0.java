@@ -113,7 +113,8 @@ public class NameplateReader2_0 {
     }
 
     public HashMap<String, AssetSpecificPropertyCollection> getAssetSpecificProperties() {
-        
+        Optional<SubmodelElementCollection> assetSpecificPropSmc = ElementUtils.getSmc(this.nameplateSubmodel.getSubmodelElements(), NameplateConstants.Nameplate2_0.AssetSpecificProperties.id);
+    <
     }
 
     private Marking mapMarking(SubmodelElementCollection markingSmc) {
@@ -154,7 +155,20 @@ public class NameplateReader2_0 {
     }
 
     private AssetSpecificPropertyCollection mapAssetSpecificPropertyCollection(SubmodelElementCollection assetPropertySmc) {
+        AssetSpecificPropertyCollection assetPropertyCollection = new AssetSpecificPropertyCollection();
 
+        List<SubmodelElementCollection> guidelinePropertyCollectionSmcs = ElementUtils.getSmcs(assetPropertySmc.getValue(), NameplateConstants.Nameplate2_0.AssetSpecificProperties.GuidelineSpecificProperties.id);
+
+        for(SubmodelElementCollection guidelinePropertyCollectionSmc: guidelinePropertyCollectionSmcs) {
+            assetPropertyCollection.addGuidelineSpecificPropertyCollection(guidelinePropertyCollectionSmc.getIdShort(), mapGuidelineSpecificPropertyCollection(guidelinePropertyCollectionSmc));
+        }
+
+        assetPropertySmc.getValue().stream()
+                .filter(se -> se instanceof Property)
+                .map(se -> ((Property)se))
+                .forEach(assetPropertyCollection::addArbitraryProperty);
+
+        return assetPropertyCollection;
     }
 
     private GuidelineSpecificPropertyCollection mapGuidelineSpecificPropertyCollection(SubmodelElementCollection guidelinePropertySmc) {
