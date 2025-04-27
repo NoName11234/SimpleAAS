@@ -7,12 +7,29 @@ import java.util.List;
 import java.util.Optional;
 
 public class ElementUtils {
-    public static List<Property> getPropertyValues(List<SubmodelElement> elements, String semanticId) {
+    public static List<Property> getProperties(List<SubmodelElement> elements, String semanticId) {
         return elements.stream()
                 .filter(se -> se instanceof Property)
                 .map(se -> ((Property)se))
                 .filter(p -> compareSemanticId(p.getSemanticId(), semanticId))
                 .toList();
+    }
+
+    public static List<String> getPropertyValues(List<SubmodelElement> elements, String semanticId) {
+        return elements.stream()
+                .filter(se -> se instanceof Property)
+                .map(se -> ((Property)se))
+                .filter(p -> compareSemanticId(p.getSemanticId(), semanticId))
+                .map(Property::getValue)
+                .toList();
+    }
+
+    public static Optional<Property> getProperty(List<SubmodelElement> elements, String semanticId) {
+        return elements.stream()
+                .filter(se -> se instanceof Property)
+                .map(se -> ((Property)se))
+                .filter(p -> compareSemanticId(p.getSemanticId(), semanticId))
+                .findAny();
     }
 
     public static Optional<String> getPropertyValue(List<SubmodelElement> elements, String semanticId) {
@@ -21,6 +38,14 @@ public class ElementUtils {
                 .map(se -> ((Property)se))
                 .filter(p -> compareSemanticId(p.getSemanticId(), semanticId))
                 .map(Property::getValue)
+                .findAny();
+    }
+
+    public static Optional<MultiLanguageProperty> getMlp(List<SubmodelElement> elements, String semanticId) {
+        return elements.stream()
+                .filter(se -> se instanceof MultiLanguageProperty)
+                .map(se -> ((MultiLanguageProperty)se))
+                .filter(mlp -> compareSemanticId(mlp.getSemanticId(), semanticId))
                 .findAny();
     }
 
