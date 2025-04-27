@@ -14,9 +14,7 @@ import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.externalelec
 import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.externalelectricalcircuit.SafetyRelatedPropertiesForActiveBehaviour;
 import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.externalelectricalcircuit.SafetyRelatedPropertiesForPassiveBehaviour;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class NameplateReader2_0 {
     private final Submodel nameplateSubmodel;
@@ -176,7 +174,28 @@ public class NameplateReader2_0 {
     }
 
     private GuidelineSpecificPropertyCollection mapGuidelineSpecificPropertyCollection(SubmodelElementCollection guidelinePropertySmc) {
+        Property guidelineForConformityDeclarationProperty = guidelinePropertySmc.getValue().stream()
+                .filter(se -> se instanceof Property)
+                .map(se -> ((Property)se))
+                .filter(p -> ElementUtils.compareSemanticId(p.getSemanticId(), NameplateConstants.Nameplate2_0.AssetSpecificProperties.GuidelineSpecificProperties.guidelineForConformityDeclaration))
+                .findAny().get();
 
+        List<SubmodelElement> elements = new ArrayList<>(guidelinePropertySmc.getValue());
+
+        elements.remove(guidelineForConformityDeclarationProperty);
+
+        List<Property> arbitraryProps = elements.stream()
+                .filter(se -> se instanceof Property)
+                .map(se -> ((Property)se))
+                .toList();
+
+        GuidelineSpecificPropertyCollection guidelinePropertyCollection = new GuidelineSpecificPropertyCollection(guidelineForConformityDeclarationProperty.getValue());
+
+        for(Property property: arbitraryProps) {
+            guidelinePropertyCollection.addArbitraryProperty(property.getIdShort(), property.getValue());
+        }
+
+        return guidelinePropertyCollection;
     }
 
     private ExplosionSafety mapExplosionSafety(SubmodelElementCollection explosionSafetySmc) {
