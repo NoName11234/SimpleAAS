@@ -3,7 +3,6 @@ package org.simpleaas.nameplate.nameplate2_0;
 import org.eclipse.digitaltwin.aas4j.v3.model.*;
 import org.simpleaas.contactinformation.contactinformation1_0.ContactInformation;
 import org.simpleaas.contactinformation.contactinformation1_0.ContactInformationReader1_0;
-import org.simpleaas.exception.SubmodelElementNotFoundException;
 import org.simpleaas.helper.ElementUtils;
 import org.simpleaas.helper.FileModel;
 import org.simpleaas.nameplate.NameplateConstants;
@@ -112,9 +111,14 @@ public class NameplateReader2_0 {
         return markings;
     }
 
-    public HashMap<String, AssetSpecificPropertyCollection> getAssetSpecificProperties() {
-        Optional<SubmodelElementCollection> assetSpecificPropSmc = ElementUtils.getSmc(this.nameplateSubmodel.getSubmodelElements(), NameplateConstants.Nameplate2_0.AssetSpecificProperties.id);
-    <
+    public Optional<AssetSpecificPropertyCollection> getAssetSpecificProperties() {
+        Optional<SubmodelElementCollection> optAssetSpecificPropSmc = ElementUtils.getSmc(this.nameplateSubmodel.getSubmodelElements(), NameplateConstants.Nameplate2_0.AssetSpecificProperties.id);
+
+        if(optAssetSpecificPropSmc.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(mapAssetSpecificPropertyCollection(optAssetSpecificPropSmc.get()));
+        }
     }
 
     private Marking mapMarking(SubmodelElementCollection markingSmc) {
