@@ -7,11 +7,6 @@ Java library for simple usage of different submodel standards of asset administr
 | Contact Information | 1.0 | Yes | Yes | No |
 | Digital Nameplate | 3.0 | Yes | No | No |
 
-## Planned features
-- Contact Information 1.0: conformity testing
-- Digital Nameplate 2.0: reading, writing, conformity testing
-- Digital Nameplate 3.0: writing, conformity testing
-
 ## Usage
 ### Reading
 Create a new object of the reader class for the submodel standard with the submodel object.
