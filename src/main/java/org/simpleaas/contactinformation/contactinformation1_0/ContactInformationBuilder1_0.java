@@ -34,6 +34,12 @@ public class ContactInformationBuilder1_0 {
         findTemplateElements();
     }
 
+    public SubmodelElementCollection createContactInformationSmc(ContactInformation contactInformation) {
+        SubmodelElementCopier copier = new SubmodelElementCopier(this.templateContactInformation);
+        SubmodelElementCollection contactInformationSmc = (SubmodelElementCollection) copier.createCopy();
+
+    }
+
     /**
      * Returns a submodel of type contact information with the set values.
      * @return submodel of type contact information
@@ -359,6 +365,10 @@ public class ContactInformationBuilder1_0 {
                 }
             }
         }
+    }
+
+    private void mapContactInformationOnSmc(ContactInformation contactInformation, SubmodelElementCollection contactInformationSmc) {
+        
     }
 
     /**
