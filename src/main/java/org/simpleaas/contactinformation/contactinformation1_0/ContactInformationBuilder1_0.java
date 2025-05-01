@@ -34,10 +34,20 @@ public class ContactInformationBuilder1_0 {
         findTemplateElements();
     }
 
+    /**
+     * Creates a submodel element collection with data of the contact information data class.
+     * Used for contact information drop-ins used by other submodel standards.
+     * @param contactInformation data class with contact information data
+     * @return submodel element collection with the contact information data
+     */
     public SubmodelElementCollection createContactInformationSmc(ContactInformation contactInformation) {
         SubmodelElementCopier copier = new SubmodelElementCopier(this.templateContactInformation);
         SubmodelElementCollection contactInformationSmc = (SubmodelElementCollection) copier.createCopy();
+        contactInformationSmc.setIdShort(contactInformation.getShortId());
 
+        mapContactInformationOnSmc(contactInformation, contactInformationSmc);
+
+        return contactInformationSmc;
     }
 
     /**
@@ -65,6 +75,144 @@ public class ContactInformationBuilder1_0 {
         contactInformationSmc.setIdShort(contactInformation.getShortId());
 
         //map values from contact information data object on created submodel element collection
+        mapContactInformationOnSmc(contactInformation, contactInformationSmc);
+
+        this.template.getSubmodelElements().add(contactInformationSmc);
+    }
+
+    /**
+     * Maps the content of the email data object on the submodel element collection.
+     * @param emailSmc submodel element collection for email data
+     * @param email email data object
+     */
+    private void addEmail(SubmodelElementCollection emailSmc, Email email) {
+        for(SubmodelElement submodelElement: emailSmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()){
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.emailAddress)) {
+                        property.setValue(email.getEmailAddress());
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.typeOfEmailAddress)) {
+                        if(email.getTypeOfEmailAddress().isPresent()) {
+                            property.setValue(email.getTypeOfEmailAddress().get().getSemanticId());
+                        } else {
+                            emailSmc.getValue().remove(property);
+                        }
+                    }
+                }
+            } else if (submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()){
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.publicKey)) {
+                        if(!email.getPublicKey().isEmpty()) {
+                            addValuesToMlp(mlp, email.getPublicKey());
+                        } else {
+                            emailSmc.getValue().remove(mlp);
+                        }
+                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.typeOfPublicKey)) {
+                        if(!email.getTypeOfPublicKey().isEmpty()) {
+                            addValuesToMlp(mlp, email.getTypeOfPublicKey());
+                        } else {
+                            emailSmc.getValue().remove(mlp);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Maps the content of the fax data object on the submodel element collection.
+     * @param faxSmc submodel element collection for fax data
+     * @param fax fax data object
+     */
+    private void addFax(SubmodelElementCollection faxSmc, Fax fax) {
+        for(SubmodelElement submodelElement: faxSmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()) {
+                    if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.typeOfFaxNumber)) {
+                        if(fax.getTypeOfFaxNumber().isPresent()) {
+                            property.setValue(fax.getTypeOfFaxNumber().get().getSemanticId());
+                        } else {
+                            faxSmc.getValue().remove(property);
+                        }
+                    }
+                }
+            } else if (submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()) {
+                    if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.faxNumber)) {
+                        addValuesToMlp(mlp, fax.getFaxNumber());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Maps the content of the IP communication data object on the submodel element collection.
+     * @param ipCommunicationSmc submodel element collection for IP communication data
+     * @param ipCommunication IP communication data object
+     */
+    private void addIpCommunication(SubmodelElementCollection ipCommunicationSmc, IpCommunication ipCommunication) {
+        for(SubmodelElement submodelElement: ipCommunicationSmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.addressOfAdditionalLink)) {
+                        property.setValue(ipCommunication.getAddressOfAdditionalLink());
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.typeOfCommunication)) {
+                        if(ipCommunication.getTypeOfCommunication().isPresent()) {
+                            property.setValue(ipCommunication.getTypeOfCommunication().get().getSemanticId());
+                        } else {
+                            ipCommunicationSmc.getValue().remove(property);
+                        }
+                    }
+                }
+            } else if(submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.availableTime)) {
+                        if(!ipCommunication.getAvailableTime().isEmpty()) {
+                            addValuesToMlp(mlp, ipCommunication.getAvailableTime());
+                        } else {
+                            ipCommunicationSmc.getValue().remove(mlp);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Maps the content of the phone data object on the submodel element collection.
+     * @param phoneSmc submodel element collection for phone data
+     * @param phone phone data object
+     */
+    private void addPhone(SubmodelElementCollection phoneSmc, Phone phone) {
+        for(SubmodelElement submodelElement: phoneSmc.getValue()) {
+            if(submodelElement instanceof Property property) {
+                for(Key key: property.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.typeOfTelephone)) {
+                        if(phone.getTypeOfTelephone().isPresent()) {
+                            property.setValue(phone.getTypeOfTelephone().get().getSemanticId());
+                        } else {
+                            phoneSmc.getValue().remove(property);
+                        }
+                    }
+                }
+            } else if(submodelElement instanceof MultiLanguageProperty mlp) {
+                for(Key key: mlp.getSemanticId().getKeys()) {
+                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.telephoneNumber)) {
+                        addValuesToMlp(mlp, phone.getTelephoneNumber());
+                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.availableTime)) {
+                        if(!phone.getAvailableTime().isEmpty()) {
+                            addValuesToMlp(mlp, phone.getAvailableTime());
+                        } else {
+                            phoneSmc.getValue().remove(mlp);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void mapContactInformationOnSmc(ContactInformation contactInformation, SubmodelElementCollection contactInformationSmc) {
         for(SubmodelElement submodelElement: contactInformationSmc.getValue()) {
             if(submodelElement instanceof Property property) {
                 for(Key key: property.getSemanticId().getKeys()){
@@ -233,142 +381,6 @@ public class ContactInformationBuilder1_0 {
                 }
             }
         }
-    }
-
-    /**
-     * Maps the content of the email data object on the submodel element collection.
-     * @param emailSmc submodel element collection for email data
-     * @param email email data object
-     */
-    private void addEmail(SubmodelElementCollection emailSmc, Email email) {
-        for(SubmodelElement submodelElement: emailSmc.getValue()) {
-            if(submodelElement instanceof Property property) {
-                for(Key key: property.getSemanticId().getKeys()){
-                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.emailAddress)) {
-                        property.setValue(email.getEmailAddress());
-                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.typeOfEmailAddress)) {
-                        if(email.getTypeOfEmailAddress().isPresent()) {
-                            property.setValue(email.getTypeOfEmailAddress().get().getSemanticId());
-                        } else {
-                            emailSmc.getValue().remove(property);
-                        }
-                    }
-                }
-            } else if (submodelElement instanceof MultiLanguageProperty mlp) {
-                for(Key key: mlp.getSemanticId().getKeys()){
-                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.publicKey)) {
-                        if(!email.getPublicKey().isEmpty()) {
-                            addValuesToMlp(mlp, email.getPublicKey());
-                        } else {
-                            emailSmc.getValue().remove(mlp);
-                        }
-                    } else if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Email.typeOfPublicKey)) {
-                        if(!email.getTypeOfPublicKey().isEmpty()) {
-                            addValuesToMlp(mlp, email.getTypeOfPublicKey());
-                        } else {
-                            emailSmc.getValue().remove(mlp);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Maps the content of the fax data object on the submodel element collection.
-     * @param faxSmc submodel element collection for fax data
-     * @param fax fax data object
-     */
-    private void addFax(SubmodelElementCollection faxSmc, Fax fax) {
-        for(SubmodelElement submodelElement: faxSmc.getValue()) {
-            if(submodelElement instanceof Property property) {
-                for(Key key: property.getSemanticId().getKeys()) {
-                    if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.typeOfFaxNumber)) {
-                        if(fax.getTypeOfFaxNumber().isPresent()) {
-                            property.setValue(fax.getTypeOfFaxNumber().get().getSemanticId());
-                        } else {
-                            faxSmc.getValue().remove(property);
-                        }
-                    }
-                }
-            } else if (submodelElement instanceof MultiLanguageProperty mlp) {
-                for(Key key: mlp.getSemanticId().getKeys()) {
-                    if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Fax.faxNumber)) {
-                        addValuesToMlp(mlp, fax.getFaxNumber());
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Maps the content of the IP communication data object on the submodel element collection.
-     * @param ipCommunicationSmc submodel element collection for IP communication data
-     * @param ipCommunication IP communication data object
-     */
-    private void addIpCommunication(SubmodelElementCollection ipCommunicationSmc, IpCommunication ipCommunication) {
-        for(SubmodelElement submodelElement: ipCommunicationSmc.getValue()) {
-            if(submodelElement instanceof Property property) {
-                for(Key key: property.getSemanticId().getKeys()) {
-                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.addressOfAdditionalLink)) {
-                        property.setValue(ipCommunication.getAddressOfAdditionalLink());
-                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.typeOfCommunication)) {
-                        if(ipCommunication.getTypeOfCommunication().isPresent()) {
-                            property.setValue(ipCommunication.getTypeOfCommunication().get().getSemanticId());
-                        } else {
-                            ipCommunicationSmc.getValue().remove(property);
-                        }
-                    }
-                }
-            } else if(submodelElement instanceof MultiLanguageProperty mlp) {
-                for(Key key: mlp.getSemanticId().getKeys()) {
-                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.IpCommunication.availableTime)) {
-                        if(!ipCommunication.getAvailableTime().isEmpty()) {
-                            addValuesToMlp(mlp, ipCommunication.getAvailableTime());
-                        } else {
-                            ipCommunicationSmc.getValue().remove(mlp);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Maps the content of the phone data object on the submodel element collection.
-     * @param phoneSmc submodel element collection for phone data
-     * @param phone phone data object
-     */
-    private void addPhone(SubmodelElementCollection phoneSmc, Phone phone) {
-        for(SubmodelElement submodelElement: phoneSmc.getValue()) {
-            if(submodelElement instanceof Property property) {
-                for(Key key: property.getSemanticId().getKeys()) {
-                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.typeOfTelephone)) {
-                        if(phone.getTypeOfTelephone().isPresent()) {
-                            property.setValue(phone.getTypeOfTelephone().get().getSemanticId());
-                        } else {
-                            phoneSmc.getValue().remove(property);
-                        }
-                    }
-                }
-            } else if(submodelElement instanceof MultiLanguageProperty mlp) {
-                for(Key key: mlp.getSemanticId().getKeys()) {
-                    if(key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.telephoneNumber)) {
-                        addValuesToMlp(mlp, phone.getTelephoneNumber());
-                    } else if (key.getValue().equals(ContactInformationConstants.ContactInformations1_0.ContactInformation.Phone.availableTime)) {
-                        if(!phone.getAvailableTime().isEmpty()) {
-                            addValuesToMlp(mlp, phone.getAvailableTime());
-                        } else {
-                            phoneSmc.getValue().remove(mlp);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void mapContactInformationOnSmc(ContactInformation contactInformation, SubmodelElementCollection contactInformationSmc) {
-        
     }
 
     /**
