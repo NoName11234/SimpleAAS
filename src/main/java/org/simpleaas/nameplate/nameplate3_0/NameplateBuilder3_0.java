@@ -1,8 +1,11 @@
 package org.simpleaas.nameplate.nameplate3_0;
 
+import org.eclipse.digitaltwin.aas4j.v3.model.ModellingKind;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
+import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElementCollection;
 import org.simpleaas.contactinformation.contactinformation1_0.ContactInformation;
 import org.simpleaas.helper.FileModel;
+import org.simpleaas.helper.copying.SubmodelCopier;
 import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.AssetSpecificProperty;
 import org.simpleaas.nameplate.nameplate3_0.marking.Marking;
 
@@ -11,8 +14,28 @@ import java.util.HashMap;
 public class NameplateBuilder3_0 {
     private Submodel template;
 
+    //template elements
+    public SubmodelElementCollection templateMarking;
+
     public NameplateBuilder3_0(Submodel template) {
-        
+        SubmodelCopier copier = new SubmodelCopier(template);
+        this.template = copier.createCopy();
+
+        this.template.setKind(ModellingKind.INSTANCE);
+
+        initializeTemplateElements();
+    }
+
+    public Submodel getSubmodel() {
+
+    }
+
+    private void initializeTemplateElements() {
+
+    }
+
+    private void removeTemplateElements(Submodel submodel) {
+
     }
 
     public NameplateBuilder3_0 getUriOfTheProduct(String uriOfTheProduct) {
@@ -96,6 +119,6 @@ public class NameplateBuilder3_0 {
     }
 
     public NameplateBuilder3_0 addAssetSpecificProperty(AssetSpecificProperty assetSpecificProperty) {
-        
+
     }
 }
