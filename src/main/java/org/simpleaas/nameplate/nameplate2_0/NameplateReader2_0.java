@@ -9,7 +9,9 @@ import org.simpleaas.nameplate.NameplateConstants;
 import org.simpleaas.nameplate.nameplate2_0.assetspecificproperty.AssetSpecificPropertyCollection;
 import org.simpleaas.nameplate.nameplate2_0.assetspecificproperty.guidelinespecificproperty.GuidelineSpecificPropertyCollection;
 import org.simpleaas.nameplate.nameplate2_0.marking.Marking;
+import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.AmbientConditions;
 import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.ExplosionSafety;
+import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.ProcessConditions;
 import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.externalelectricalcircuit.ExternalElectricalCircuit;
 import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.externalelectricalcircuit.SafetyRelatedPropertiesForActiveBehaviour;
 import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.externalelectricalcircuit.SafetyRelatedPropertiesForPassiveBehaviour;
@@ -124,12 +126,12 @@ public class NameplateReader2_0 {
 
         FileModel markingFile = ElementUtils.getFileModel(markingSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.markingFile).get();
 
-        Marking marking = new Marking(markingName, markingFile);
+        Marking marking = new Marking(markingSmc.getIdShort(), markingName, markingFile);
 
         Optional<String> optDesignation = ElementUtils.getPropertyValue(markingSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.designationOfCertificate);
         Optional<String> optIssueDate = ElementUtils.getPropertyValue(markingSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.issueDate);
         Optional<String> optExpiryDate = ElementUtils.getPropertyValue(markingSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.expiryDate);
-        List<Property> additionalTexts = ElementUtils.getPropertyValues(markingSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.markingAdditionalText);
+        List<Property> additionalTexts = ElementUtils.getProperties(markingSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.markingAdditionalText);
 
         if(optDesignation.isPresent()) {
             marking.setDesignationOfCertificateOrApproval(optDesignation.get());
@@ -150,7 +152,7 @@ public class NameplateReader2_0 {
         Optional<SubmodelElementCollection> optExplosionSafeties = ElementUtils.getSmc(markingSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.id);
 
         if(optExplosionSafeties.isPresent()) {
-            marking.setExplosionSafety(mapExplosionSafety(optExplosionSafeties.get()));
+            marking.addExplosionSafety(mapExplosionSafety(optExplosionSafeties.get()));
         }
 
         return marking;
@@ -199,6 +201,50 @@ public class NameplateReader2_0 {
     }
 
     private ExplosionSafety mapExplosionSafety(SubmodelElementCollection explosionSafetySmc) {
+        ExplosionSafety explosionSafety = new ExplosionSafety(explosionSafetySmc.getIdShort());
+
+        Optional<String> optDesignation = ElementUtils.getPropertyValue(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.designationOfCertificateOrApproval);
+        HashMap<String, String> typeOfApproval = ElementUtils.getMlpValue(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.typeOfApproval);
+        HashMap<String, String> approvalAgency = ElementUtils.getMlpValue(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.approvalAgencyTestingAgency);
+        Optional<String> optTypeOfProtection = ElementUtils.getPropertyValue(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.typeOfProtection);
+        Optional<String> optRatedInsulationVoltage = ElementUtils.getPropertyValue(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ratedInsulationVoltage);
+        Optional<ReferenceElement> optInstructionsControlDrawing = ElementUtils.getReferenceElement(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.instructionsControlDrawing);
+        Optional<String> optSpecificConditionsForUse = ElementUtils.getPropertyValue(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.specificConditionsForUse);
+        Optional<String> optIncompleteDevice = ElementUtils.getPropertyValue(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.incompleteDevice);
+        Optional<SubmodelElementCollection> optAmbientConditionsSmc = ElementUtils.getSmc(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.id);
+        Optional<SubmodelElementCollection> optProcessConditionsSmc = ElementUtils.getSmc(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.id);
+        List<SubmodelElementCollection> externalElectricCircuitsSmcs = ElementUtils.getSmcs(explosionSafetySmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.id);
+
+        optDesignation.ifPresent(explosionSafety::setDesignationOfCertificateOrApproval);
+
+        if(!typeOfApproval.isEmpty()) {
+            typeOfApproval.forEach(explosionSafety::addTypeOfApproval);
+        }
+
+        if(!approvalAgency.isEmpty()) {
+            approvalAgency.forEach(explosionSafety::addApprovalAgencyTestingAgency);
+        }
+
+        optTypeOfProtection.ifPresent(explosionSafety::setTypeOfProtection);
+        optRatedInsulationVoltage.ifPresent(explosionSafety::setRatedInsulationVoltage);
+        optInstructionsControlDrawing.ifPresent(referenceElement -> explosionSafety.setInstructionsControlDrawing(referenceElement.getValue()));
+        optSpecificConditionsForUse.ifPresent(explosionSafety::setSpecificConditionsForUse);
+        optIncompleteDevice.ifPresent(explosionSafety::setIncompleteDevice);
+        optAmbientConditionsSmc.ifPresent(ambientCondictionsSmc -> explosionSafety.setAmbientConditions(mapAmbientConditions(ambientCondictionsSmc)));
+        optProcessConditionsSmc.ifPresent(processConditionsSmc -> explosionSafety.setProcessConditions(mapProcessConditions(processConditionsSmc)));
+
+        for(SubmodelElementCollection externalElectricCircuitSmc: externalElectricCircuitsSmcs) {
+            explosionSafety.addExternalElectricCircuit(mapExternalElectricalCircuit(externalElectricCircuitSmc));
+        }
+
+        return explosionSafety;
+    }
+
+    private AmbientConditions mapAmbientConditions(SubmodelElementCollection ambientConditionsSmc) {
+
+    }
+
+    private ProcessConditions mapProcessConditions(SubmodelElementCollection processConditionsSmc) {
 
     }
 
