@@ -3,15 +3,49 @@ package org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety;
 import java.util.HashMap;
 import java.util.Optional;
 
+/**
+ * Data class for properties which are related to the ambient conditions of the device.
+ */
 public class AmbientConditions {
+    /**
+     * Category of the device in accordance with directive 94/9/EC.
+     */
     private String deviceCategory = null;
+    /**
+     * Equipment protection level according to the IEC standards in multiple languages.
+     * Language is used as key.
+     */
     private final HashMap<String, String> equipmentProtectionLevel = new HashMap<>();
+    /**
+     * Marking used only in specific regions.
+     */
     private String regionalSpecificMarking = null;
+    /**
+     * Classification of an explosion protection according to the specific measures applied to avoid ignition of a
+     * surrounding explosive atmosphere.
+     */
     private String typeOfProtection = null;
+    /**
+     * Classification of dangerous gaseous substances based on their ability to cause an explosion.
+     */
     private String explosionGroup = null;
+    /**
+     * Lower limit of the temperature range of the surrounding space in which the component, the pipework or the system
+     * can be operated.
+     */
     private String minimumAmbientTemperature = null;
+    /**
+     * Upper limit of the temperature range of the surrounding space in which the component, the pipework or the system
+     * can be operated.
+     */
     private String maxAmbientTemperature = null;
+    /**
+     * Maximum permissible surface temperature of a device used in an explosion hazardous area with combustible dust.
+     */
     private String maxSurfaceTemperatureForDustProof = null;
+    /**
+     *
+     */
     private String temperatureClass = null;
 
     public Optional<String> getTemperatureClass() {
