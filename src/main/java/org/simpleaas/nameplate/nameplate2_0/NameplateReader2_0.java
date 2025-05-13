@@ -18,6 +18,8 @@ import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.externalelec
 
 import java.util.*;
 
+import static org.simpleaas.helper.ElementUtils.getMlp;
+
 public class NameplateReader2_0 {
     private final Submodel nameplateSubmodel;
 
@@ -241,7 +243,24 @@ public class NameplateReader2_0 {
     }
 
     private AmbientConditions mapAmbientConditions(SubmodelElementCollection ambientConditionsSmc) {
+        AmbientConditions ambientConditions = new AmbientConditions();
 
+        //device category
+        Optional<String> optDeviceCategory = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.deviceCategory);
+        optDeviceCategory.ifPresent(ambientConditions::setDeviceCategory);
+
+        //equipment protection level
+        Optional<MultiLanguageProperty> optEquipProtectionLevel = ElementUtils.getMlp(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.equipmentProtectionLevel);
+
+        if(optEquipProtectionLevel.isPresent()) {
+            HashMap<String, String> equipProtectionLevelValues = ElementUtils.convertMlp(optEquipProtectionLevel.get());
+
+            for(String language: equipProtectionLevelValues.keySet()) {
+                ambientConditions.addEquipmentProtectionLevel(language, equipProtectionLevelValues.get(language));
+            }
+        }
+
+        return ambientConditions;
     }
 
     private ProcessConditions mapProcessConditions(SubmodelElementCollection processConditionsSmc) {
