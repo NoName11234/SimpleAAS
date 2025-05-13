@@ -2,10 +2,10 @@
 Java library for simple usage of different submodel standards of asset administration shells.
 
 ## Supported submodel standards
-| Submodel Name | Version | Reading | Writing | Testing |
-|----|----|----|---------|----|
-| Contact Information | 1.0 | Yes | Yes | No |
-| Digital Nameplate | 3.0 | Yes | No | No |
+| Submodel Name | Version | Reading | Writing |
+|----|----|----|---------|
+| Contact Information | 1.0 | Yes | Yes |
+| Digital Nameplate | 3.0 | Yes | No |
 
 ## Usage
 ### Reading
