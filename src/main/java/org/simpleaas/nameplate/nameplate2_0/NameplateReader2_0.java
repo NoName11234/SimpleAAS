@@ -260,6 +260,55 @@ public class NameplateReader2_0 {
             }
         }
 
+        //regional specific marking
+        Optional<String> optRegionalSpecificMarking = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.regionalSpecificMarking);
+
+        if(optRegionalSpecificMarking.isPresent()) {
+            ambientConditions.setRegionalSpecificMarking(optRegionalSpecificMarking.get());
+        }
+
+        //type of protection
+        Optional<String> optTypeOfProtection = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.typeOfProtection);
+
+        if (optTypeOfProtection.isPresent()) {
+            ambientConditions.setTypeOfProtection(optTypeOfProtection.get());
+        }
+
+        //explosion group
+        Optional<String> optExplosionGroup = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.explosionGroup);
+
+        if (optExplosionGroup.isPresent()) {
+            ambientConditions.setExplosionGroup(optExplosionGroup.get());
+        }
+
+        //minimum ambient temperature
+        Optional<String> optMinimumTemp = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.minimumAmbientTemperature);
+
+        if(optMinimumTemp.isPresent()) {
+            ambientConditions.setMinimumAmbientTemperature(optMinimumTemp.get());
+        }
+
+        //maximum ambient temperature
+        Optional<String> optMaximumTemp = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.minimumAmbientTemperature);
+
+        if (optMaximumTemp.isPresent()) {
+            ambientConditions.setMaxAmbientTemperature(optMaximumTemp.get());
+        }
+
+        //max surface temperature for dustproof
+        Optional<String> optSurfaceTemp = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.maxSurfaceTemperatureForDustProof);
+
+        if (optSurfaceTemp.isPresent()) {
+            ambientConditions.setMaxSurfaceTemperatureForDustProof(optSurfaceTemp.get());
+        }
+
+        //temperature class
+        Optional<String> optTemperatureClass = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.temperatureClass);
+
+        if(optTemperatureClass.isPresent()) {
+            ambientConditions.setTemperatureClass(optTemperatureClass.get());
+        }
+
         return ambientConditions;
     }
 
