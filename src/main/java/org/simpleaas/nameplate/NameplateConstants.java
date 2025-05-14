@@ -6,6 +6,7 @@ public class NameplateConstants {
         public static String uriOfTheProduct = "0173-1#02-AAY811#001";
         public static String manufacturerName = "0173-1#02-AAO677#002";
         public static String manufacturerProductDesignation = "0173-1#02-AAW338#001";
+        public static String contactInformation = "https://adminshell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation";
         public static String manufacturerProductRoot = "0173-1#02-AAU732#001";
         public static String manufacturerProductFamily = "0173-1#02-AAU731#001";
         public static String manufacturerProductType = "0173-1#02-AAO057#002";
@@ -81,8 +82,6 @@ public class NameplateConstants {
                             public static String characteristics = "https://admin-shell.io/zvei/nameplate/2/0/Nameplate/Markings/Marking/ExplosionSafeties/ExplosionSafety/ExternalElectric alCircuit/Characteristics";
                             public static String fisco = "https://admin-shell.io/zvei/nameplate/2/0/Nameplate/Markings/Marking/ExplosionSafeties/ExplosionSafety/ExternalElectricalCircuit/Fisco";
                             public static String twoWise = "https://admin-shell.io/zvei/nameplate/2/0/Nameplate/Markings/Marking/ExplosionSafeties/ExplosionSafety/ExternalElectric alCircuit/TwoWISE";
-                            public static String safetyRelatedPropertiesForPassiveBehaviour = "0173-1#02-AAQ380#006";
-                            public static String safetyRelatedPropertiesForActiveBehaviour = "0173-1#02-AAQ381#006";
 
                             public static class SafetyRelatedPropertiesForPassiveBehaviour {
                                 public static String id = "0173-1#02-AAQ380#006";
@@ -99,7 +98,7 @@ public class NameplateConstants {
                                 public static String maxOutputVoltage = "0173-1#02-AAM635#003";
                                 public static String maxOutputCurrent = "0173-1#02-AAM641#004";
                                 public static String maxEternalCapacitance = "0173-1#02-AAM637#004";
-                                public static String maxInternalInductance = "0173-1#02-AAM636#003";
+                                public static String maxExternalInductance = "0173-1#02-AAM636#003";
                                 public static String maxExternalInductanceResistanceRatio = "0173-1#02-AAM634#003";
 
                             }

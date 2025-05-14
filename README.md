@@ -5,6 +5,7 @@ Java library for simple usage of different submodel standards of asset administr
 | Submodel Name | Version | Reading | Writing |
 |----|----|----|---------|
 | Contact Information | 1.0 | Yes | Yes |
+| Digital Nameplate | 2.0 | Yes | No |
 | Digital Nameplate | 3.0 | Yes | No |
 
 ## Usage
