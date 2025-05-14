@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class ExternalElectricalCircuit {
+    private final String shortId;
     private String designationOfElectricalTerminal = null;
     private String typeOfProtection = null;
     private final HashMap<String, String> equipmentProtectionLevel = new HashMap<>();
@@ -14,12 +15,20 @@ public class ExternalElectricalCircuit {
     private SafetyRelatedPropertiesForPassiveBehaviour passiveSafetyRelatedProperties = null;
     private SafetyRelatedPropertiesForActiveBehaviour activeSafetyRelatedProperties = null;
 
-    private ExternalElectricalCircuit setDesignationOfElectricalTerminal(String designationOfElectricalTerminal) {
+    public ExternalElectricalCircuit(String shortId) {
+        this.shortId = shortId;
+    }
+
+    public String getShortId() {
+        return shortId;
+    }
+
+    public ExternalElectricalCircuit setDesignationOfElectricalTerminal(String designationOfElectricalTerminal) {
         this.designationOfElectricalTerminal = designationOfElectricalTerminal;
         return this;
     }
 
-    private Optional<String> getDesignationOfElectricalTerminal() {
+    public Optional<String> getDesignationOfElectricalTerminal() {
         return Optional.ofNullable(this.designationOfElectricalTerminal);
     }
 

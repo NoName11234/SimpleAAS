@@ -386,7 +386,76 @@ public class NameplateReader2_0 {
     }
 
     private ExternalElectricalCircuit mapExternalElectricalCircuit(SubmodelElementCollection externalElectricalCircuitSmc) {
+        ExternalElectricalCircuit externalElectricalCircuit = new ExternalElectricalCircuit(externalElectricalCircuitSmc.getIdShort());
 
+        //designation of electrical terminal
+        Optional<String> optDesignationTerminal = ElementUtils.getPropertyValue(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.designationOfElectricalTerminal);
+
+        if(optDesignationTerminal.isPresent()) {
+            externalElectricalCircuit.setDesignationOfElectricalTerminal(optDesignationTerminal.get());
+        }
+
+        //type of protection
+        Optional<String> optTypeOfProtection = ElementUtils.getPropertyValue(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.typeOfProtection);
+
+        if(optTypeOfProtection.isPresent()) {
+            externalElectricalCircuit.setTypeOfProtection(optTypeOfProtection.get());
+        }
+
+        //equipment protection level
+        Optional<MultiLanguageProperty> optProtectionLevel = ElementUtils.getMlp(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.equipmentProtectionLevel);
+
+        if(optProtectionLevel.isPresent()) {
+            HashMap<String, String> protectionLevelValues = ElementUtils.convertMlp(optProtectionLevel.get());
+
+            for(String language: protectionLevelValues.keySet()) {
+                externalElectricalCircuit.addEquipmentProtectionLevel(language, protectionLevelValues.get(language));
+            }
+        }
+
+        //explosion group
+        Optional<String> optExplosionGroup = ElementUtils.getPropertyValue(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.explosionGroup);
+
+        if (optExplosionGroup.isPresent()) {
+            externalElectricalCircuit.setExplosionGroup(optExplosionGroup.get());
+        }
+
+        //characteristics
+        Optional<String> optCharacteristics = ElementUtils.getPropertyValue(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.characteristics);
+
+        if (optCharacteristics.isPresent()) {
+            externalElectricalCircuit.setCharacteristics(optCharacteristics.get());
+        }
+
+        //fisco
+        Optional<String> optFisco = ElementUtils.getPropertyValue(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.fisco);
+
+        if (optFisco.isPresent()) {
+            externalElectricalCircuit.setFisco(optFisco.get());
+        }
+
+        //twoWISE
+        Optional<String> optTwoWise = ElementUtils.getPropertyValue(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.twoWise);
+
+        if (optTwoWise.isPresent()) {
+            externalElectricalCircuit.setTwoWise(optTwoWise.get());
+        }
+
+        //safety related properties for passive behaviour
+        Optional<SubmodelElementCollection> optPassivePropertiesSmc = ElementUtils.getSmc(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForPassiveBehaviour.id);
+
+        if(optPassivePropertiesSmc.isPresent()) {
+            externalElectricalCircuit.setPassiveSafetyRelatedProperties(mapSafetyRelatedPropertiesForPassiveBehaviour(optPassivePropertiesSmc.get()));
+        }
+
+        //safety related properties for active behaviour
+        Optional<SubmodelElementCollection> optActivePropertiesSmc = ElementUtils.getSmc(externalElectricalCircuitSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForActiveBehaviour.id);
+
+        if (optActivePropertiesSmc.isPresent()) {
+            externalElectricalCircuit.setActiveSafetyRelatedProperties(mapSafetyRelatedPropertiesForActiveBehaviour(optActivePropertiesSmc.get()));
+        }
+
+        return externalElectricalCircuit;
     }
 
     private SafetyRelatedPropertiesForActiveBehaviour mapSafetyRelatedPropertiesForActiveBehaviour(SubmodelElementCollection propertiesActiveBehaviourSmc) {
