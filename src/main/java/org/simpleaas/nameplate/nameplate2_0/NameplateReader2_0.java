@@ -18,8 +18,6 @@ import org.simpleaas.nameplate.nameplate2_0.marking.explosionsafety.externalelec
 
 import java.util.*;
 
-import static org.simpleaas.helper.ElementUtils.getMlp;
-
 public class NameplateReader2_0 {
     private final Submodel nameplateSubmodel;
 
@@ -289,7 +287,7 @@ public class NameplateReader2_0 {
         }
 
         //maximum ambient temperature
-        Optional<String> optMaximumTemp = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.minimumAmbientTemperature);
+        Optional<String> optMaximumTemp = ElementUtils.getPropertyValue(ambientConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.AmbientConditions.maxAmbientTemperature);
 
         if (optMaximumTemp.isPresent()) {
             ambientConditions.setMaxAmbientTemperature(optMaximumTemp.get());
@@ -459,10 +457,91 @@ public class NameplateReader2_0 {
     }
 
     private SafetyRelatedPropertiesForActiveBehaviour mapSafetyRelatedPropertiesForActiveBehaviour(SubmodelElementCollection propertiesActiveBehaviourSmc) {
+        SafetyRelatedPropertiesForActiveBehaviour safetyRelatedPropertiesForActiveBehaviour = new SafetyRelatedPropertiesForActiveBehaviour();
 
+        //max output power
+        Optional<String> optMaxOutputPower = ElementUtils.getPropertyValue(propertiesActiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForActiveBehaviour.maxOutputPower);
+
+        if(optMaxOutputPower.isPresent()) {
+            safetyRelatedPropertiesForActiveBehaviour.setMaxOutputPower(optMaxOutputPower.get());
+        }
+
+        //max output voltage
+        Optional<String> optMaxOutputVoltage = ElementUtils.getPropertyValue(propertiesActiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForActiveBehaviour.maxOutputVoltage);
+
+        if(optMaxOutputVoltage.isPresent()) {
+            safetyRelatedPropertiesForActiveBehaviour.setMaxOutputVoltage(optMaxOutputVoltage.get());
+        }
+
+        //max output current
+        Optional<String> optMaxOutputCurrent = ElementUtils.getPropertyValue(propertiesActiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForActiveBehaviour.maxOutputCurrent);
+
+        if(optMaxOutputCurrent.isPresent()) {
+            safetyRelatedPropertiesForActiveBehaviour.setMaxOutputCurrent(optMaxOutputCurrent.get());
+        }
+
+        //max external capacitance
+        Optional<String> optMaxExternalCapacitance = ElementUtils.getPropertyValue(propertiesActiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForActiveBehaviour.maxEternalCapacitance);
+
+        if (optMaxExternalCapacitance.isPresent()) {
+            safetyRelatedPropertiesForActiveBehaviour.setMaxExternalCapacitance(optMaxExternalCapacitance.get());
+        }
+
+        //max external inductance
+        Optional<String> optMaxExternalInductance = ElementUtils.getPropertyValue(propertiesActiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForActiveBehaviour.maxExternalInductance);
+
+        if(optMaxExternalInductance.isPresent()) {
+            safetyRelatedPropertiesForActiveBehaviour.setMaxExternalInductance(optMaxExternalInductance.get());
+        }
+
+        //max external inductance resistance ratio
+        Optional<String> optResistanceRatio = ElementUtils.getPropertyValue(propertiesActiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForActiveBehaviour.maxExternalInductanceResistanceRatio);
+
+        if(optResistanceRatio.isPresent()) {
+            safetyRelatedPropertiesForActiveBehaviour.setMaxExternalInductanceResistanceRatio(optResistanceRatio.get());
+        }
+
+        return safetyRelatedPropertiesForActiveBehaviour;
     }
 
     private SafetyRelatedPropertiesForPassiveBehaviour mapSafetyRelatedPropertiesForPassiveBehaviour(SubmodelElementCollection propertiesPassiveBehaviourSmc) {
+        SafetyRelatedPropertiesForPassiveBehaviour safetyRelatedPropertiesForPassiveBehaviour = new SafetyRelatedPropertiesForPassiveBehaviour();
 
+        //max input power
+        Optional<String> optMaxInputPower = ElementUtils.getPropertyValue(propertiesPassiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForPassiveBehaviour.maxInputPower);
+
+        if(optMaxInputPower.isPresent()) {
+            safetyRelatedPropertiesForPassiveBehaviour.setMaxInputPower(optMaxInputPower.get());
+        }
+
+        //max input voltage
+        Optional<String> optMaxInputVoltage = ElementUtils.getPropertyValue(propertiesPassiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForPassiveBehaviour.maxInputVoltage);
+
+        if(optMaxInputVoltage.isPresent()) {
+            safetyRelatedPropertiesForPassiveBehaviour.setMaxInputVoltage(optMaxInputVoltage.get());
+        }
+
+        //max input current
+        Optional<String> optMaxInputCurrent = ElementUtils.getPropertyValue(propertiesPassiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForPassiveBehaviour.maxInputCurrent);
+
+        if(optMaxInputCurrent.isPresent()) {
+            safetyRelatedPropertiesForPassiveBehaviour.setMaxInputCurrent(optMaxInputCurrent.get());
+        }
+
+        //max internal capacitance
+        Optional<String> optMaxInternalCapacitance = ElementUtils.getPropertyValue(propertiesPassiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForPassiveBehaviour.maxInternalCapacitance);
+
+        if(optMaxInternalCapacitance.isPresent()) {
+            safetyRelatedPropertiesForPassiveBehaviour.setMaxInternalCapacitance(optMaxInternalCapacitance.get());
+        }
+
+        //max internal inductance
+        Optional<String> optMaxInternalInductance = ElementUtils.getPropertyValue(propertiesPassiveBehaviourSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ExternalElectricalCircuit.SafetyRelatedPropertiesForPassiveBehaviour.maxInternalInductance);
+
+        if(optMaxInternalInductance.isPresent()) {
+            safetyRelatedPropertiesForPassiveBehaviour.setMaxInternalInductance(optMaxInternalInductance.get());
+        }
+
+        return safetyRelatedPropertiesForPassiveBehaviour;
     }
 }
