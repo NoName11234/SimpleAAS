@@ -313,7 +313,76 @@ public class NameplateReader2_0 {
     }
 
     private ProcessConditions mapProcessConditions(SubmodelElementCollection processConditionsSmc) {
+        ProcessConditions processConditions = new ProcessConditions();
 
+        //device category
+        Optional<String> optDeviceCategory = ElementUtils.getPropertyValue(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.deviceCategory);
+
+        if(optDeviceCategory.isPresent()) {
+            processConditions.setDeviceCategory(optDeviceCategory.get());
+        }
+
+        //equipment protection level
+        Optional<MultiLanguageProperty> optEquipProtectionLevel = ElementUtils.getMlp(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.equipmentProtectionLevel);
+
+        if(optEquipProtectionLevel.isPresent()) {
+            HashMap<String, String> equipProtectionLevelValues = ElementUtils.convertMlp(optEquipProtectionLevel.get());
+
+            for(String language: equipProtectionLevelValues.keySet()) {
+                processConditions.addEquipmentProtectionLevel(language, equipProtectionLevelValues.get(language));
+            }
+        }
+
+        //regional specific marking
+        Optional<String> optRegionalSpecificMarking = ElementUtils.getPropertyValue(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.regionalSpecificMarking);
+
+        if(optRegionalSpecificMarking.isPresent()) {
+            processConditions.setRegionalSpecificMarking(optRegionalSpecificMarking.get());
+        }
+
+        //type of protection
+        Optional<String> optTypeOfProtection = ElementUtils.getPropertyValue(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.typeOfProtection);
+
+        if(optTypeOfProtection.isPresent()) {
+            processConditions.setTypeOfProtection(optTypeOfProtection.get());
+        }
+
+        //explosion group
+        Optional<String> optExplosionGroup = ElementUtils.getPropertyValue(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.explosionGroup);
+
+        if(optExplosionGroup.isPresent()) {
+            processConditions.setExplosionGroup(optExplosionGroup.get());
+        }
+
+        //lower limiting value of process temperature
+        Optional<String> optlowerLimiting = ElementUtils.getPropertyValue(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.lowerLimitingValueOfProcessTemperature);
+
+        if(optlowerLimiting.isPresent()) {
+            processConditions.setLowerLimitingValueOfProcessTemperature(optlowerLimiting.get());
+        }
+
+        //upper limiting value of process temperature
+        Optional<String> optUpperLimiting = ElementUtils.getPropertyValue(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.upperLimitingValueOfProcessTemperature);
+
+        if(optUpperLimiting.isPresent()) {
+            processConditions.setUpperLimitingValueOfProcessTemperature(optUpperLimiting.get());
+        }
+
+        //max surface temperature for dustproof
+        Optional<String> optSurfaceTemp = ElementUtils.getPropertyValue(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.maxSurfaceTemperatureForDustProof);
+
+        if(optSurfaceTemp.isPresent()) {
+            processConditions.setMaxSurfaceTemperatureForDustProof(optSurfaceTemp.get());
+        }
+
+        //temperature class
+        Optional<String> optTempClass = ElementUtils.getPropertyValue(processConditionsSmc.getValue(), NameplateConstants.Nameplate2_0.Markings.Marking.ExplosionSafeties.ExplosionSafety.ProcessConditions.temperatureClass);
+
+        if(optTempClass.isPresent()) {
+            processConditions.setTemperatureClass(optTempClass.get());
+        }
+
+        return processConditions;
     }
 
     private ExternalElectricalCircuit mapExternalElectricalCircuit(SubmodelElementCollection externalElectricalCircuitSmc) {
