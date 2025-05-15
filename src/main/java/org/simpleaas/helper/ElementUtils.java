@@ -84,6 +84,14 @@ public class ElementUtils {
                 .toList();
     }
 
+    public static Optional<SubmodelElementList> getSml(List<SubmodelElement> elements, String semanticId) {
+        return elements.stream()
+                .filter(se -> se instanceof SubmodelElementList)
+                .map(se -> ((SubmodelElementList)se))
+                .filter(sml -> compareSemanticId(sml.getSemanticId(), semanticId))
+                .findAny();
+    }
+
     public static Optional<ReferenceElement> getReferenceElement(List<SubmodelElement> elements, String semanticId) {
         return elements.stream()
                 .filter(se -> se instanceof ReferenceElement)
