@@ -42,7 +42,12 @@ public class NameplateBuilder3_0 {
     }
 
     public Submodel getSubmodel() {
+        SubmodelCopier copier = new SubmodelCopier(this.template);
+        Submodel submodel = copier.createCopy();
 
+        removeTemplateElements(submodel);
+
+        return submodel;
     }
 
     private void initializeTemplateElements() {
