@@ -5,13 +5,15 @@ import org.simpleaas.contactinformation.contactinformation1_0.ContactInformation
 import org.simpleaas.contactinformation.contactinformation1_0.ContactInformationReader1_0;
 import org.simpleaas.helper.FileModel;
 import org.simpleaas.nameplate.NameplateConstants;
-import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.AssetSpecificProperty;
-import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.GuidelineSpecificProperty;
+import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.AssetSpecificPropertyCollection;
+import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.GuidelineSpecificPropertyCollection;
 import org.simpleaas.nameplate.nameplate3_0.marking.Marking;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+
+import static org.simpleaas.helper.ElementUtils.*;
 
 public class NameplateReader3_0 {
     private final Submodel submodel;
@@ -114,33 +116,33 @@ public class NameplateReader3_0 {
         return markings;
     }
 
-    public AssetSpecificProperty getAssetSpecificProperties() {
+    public AssetSpecificPropertyCollection getAssetSpecificProperties() {
         Optional<SubmodelElementCollection> optAssetSpecificPropSmc = getSmc(this.submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.id);
-        AssetSpecificProperty assetSpecificProperty = new AssetSpecificProperty();
+        AssetSpecificPropertyCollection assetSpecificPropertyCollection = new AssetSpecificPropertyCollection();
 
         if(optAssetSpecificPropSmc.isEmpty()) {
-            return assetSpecificProperty;
+            return assetSpecificPropertyCollection;
         }
 
         for(SubmodelElement submodelElement: optAssetSpecificPropSmc.get().getValue()) {
             if(submodelElement instanceof Property property) {
                 if(compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryProperty)) {
-                    assetSpecificProperty.addArbitraryProperty(property.getIdShort(), property.getValue());
+                    assetSpecificPropertyCollection.addArbitraryProperty(property.getIdShort(), property.getValue());
                 }
             } else if (submodelElement instanceof MultiLanguageProperty mlp) {
                 if(compareSemanticId(mlp.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryMlp)) {
-                    assetSpecificProperty.addArbitraryMlp(mlp.getIdShort(), convertMlp(mlp));
+                    assetSpecificPropertyCollection.addArbitraryMlp(mlp.getIdShort(), convertMlp(mlp));
                 }
             } else if (submodelElement instanceof File file) {
                 if(compareSemanticId(file.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryFile)) {
-                    assetSpecificProperty.addArbitraryFile(file.getIdShort(), new FileModel(file.getValue(), file.getContentType()));
+                    assetSpecificPropertyCollection.addArbitraryFile(file.getIdShort(), new FileModel(file.getValue(), file.getContentType()));
                 }
             } else if (submodelElement instanceof SubmodelElementList sml) {
                 if(compareSemanticId(sml.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.id)) {
                     for(SubmodelElement guidelineSpecificElem: sml.getValue()) {
                         if(guidelineSpecificElem instanceof SubmodelElementCollection smc) {
                             if(compareSemanticId(smc.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.id)) {
-                                assetSpecificProperty.addGuidelineSpecificProperty(smc.getIdShort(), mapGuidelineSpecificProperty(smc));
+                                assetSpecificPropertyCollection.addGuidelineSpecificProperty(smc.getIdShort(), mapGuidelineSpecificProperty(smc));
                             }
                         }
                     }
@@ -148,35 +150,35 @@ public class NameplateReader3_0 {
             }
         }
 
-        return assetSpecificProperty;
+        return assetSpecificPropertyCollection;
     }
 
-    private GuidelineSpecificProperty mapGuidelineSpecificProperty(SubmodelElementCollection guidelineSpecificPropertySmc) {
+    private GuidelineSpecificPropertyCollection mapGuidelineSpecificProperty(SubmodelElementCollection guidelineSpecificPropertySmc) {
         Property guidelineForConformityDeclaration = guidelineSpecificPropertySmc.getValue().stream()
                 .filter(se -> se instanceof Property)
                 .map(se -> ((Property)se))
                 .filter(p -> compareSemanticId(p.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.guidelineForConformityDeclaration))
                 .findAny().get();
 
-        GuidelineSpecificProperty guidelineSpecificProperty = new GuidelineSpecificProperty(guidelineForConformityDeclaration.getValue());
+        GuidelineSpecificPropertyCollection guidelineSpecificPropertyCollection = new GuidelineSpecificPropertyCollection(guidelineForConformityDeclaration.getValue());
 
         for (SubmodelElement submodelElement: guidelineSpecificPropertySmc.getValue()) {
             if(submodelElement instanceof Property property) {
                 if(compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryProperty)) {
-                    guidelineSpecificProperty.addArbitraryProperty(property.getIdShort(), property.getValue());
+                    guidelineSpecificPropertyCollection.addArbitraryProperty(property.getIdShort(), property.getValue());
                 }
             } else if(submodelElement instanceof MultiLanguageProperty mlp) {
                 if(compareSemanticId(mlp.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryMlp)) {
-                    guidelineSpecificProperty.addArbitraryMlp(mlp.getIdShort(), convertMlp(mlp));
+                    guidelineSpecificPropertyCollection.addArbitraryMlp(mlp.getIdShort(), convertMlp(mlp));
                 }
             } else if(submodelElement instanceof File file) {
                 if(compareSemanticId(file.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryFile)) {
-                    guidelineSpecificProperty.addArbitraryFile(file.getIdShort(), new FileModel(file.getValue(), file.getContentType()));
+                    guidelineSpecificPropertyCollection.addArbitraryFile(file.getIdShort(), new FileModel(file.getValue(), file.getContentType()));
                 }
             }
         }
 
-        return guidelineSpecificProperty;
+        return guidelineSpecificPropertyCollection;
     }
 
     private Marking mapMarking(SubmodelElementCollection markingSmc) {
@@ -210,60 +212,5 @@ public class NameplateReader3_0 {
         }
 
         return marking;
-    }
-
-    private boolean compareSemanticId(Reference reference, String semanticId) {
-        for(Key key: reference.getKeys()) {
-            if(key.getValue().equals(semanticId)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private Optional<String> getPropertyValue(List<SubmodelElement> elements, String semanticId) {
-        return elements.stream()
-                .filter(se -> se instanceof Property)
-                .map(se -> ((Property)se))
-                .filter(p -> compareSemanticId(p.getSemanticId(), semanticId))
-                .map(Property::getValue)
-                .findAny();
-    }
-
-    private HashMap<String, String> getMlpValue(List<SubmodelElement> elements, String semanticId) {
-        return elements.stream()
-                .filter(se -> se instanceof MultiLanguageProperty)
-                .map(se -> ((MultiLanguageProperty)se))
-                .filter(mlp -> compareSemanticId(mlp.getSemanticId(), semanticId))
-                .map(this::convertMlp)
-                .findAny().orElse(new HashMap<>());
-    }
-
-    private Optional<SubmodelElementCollection> getSmc(List<SubmodelElement> elements, String semanticId) {
-        return elements.stream()
-                .filter(se -> se instanceof SubmodelElementCollection)
-                .map(se -> ((SubmodelElementCollection)se))
-                .filter(smc -> compareSemanticId(smc.getSemanticId(), semanticId))
-                .findAny();
-    }
-
-    private Optional<FileModel> getFileModel(List<SubmodelElement> elements, String semanticId) {
-        return elements.stream()
-                .filter(se -> se instanceof File)
-                .map(se -> ((File)se))
-                .filter(f -> compareSemanticId(f.getSemanticId(), semanticId))
-                .map(f -> new FileModel(f.getValue(), f.getContentType()))
-                .findAny();
-    }
-
-    private HashMap<String, String> convertMlp(MultiLanguageProperty mlp) {
-        HashMap<String, String> values = new HashMap<>();
-
-        for(LangStringTextType value: mlp.getValue()) {
-            values.put(value.getLanguage(), value.getText());
-        }
-
-        return values;
     }
 }
