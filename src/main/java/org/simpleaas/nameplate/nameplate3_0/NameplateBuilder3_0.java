@@ -14,6 +14,21 @@ import java.util.HashMap;
 public class NameplateBuilder3_0 {
     private Submodel template;
 
+    //flags
+    private boolean isProductRootUsed = false;
+    private boolean isProductFamilyUsed = false;
+    private boolean isProductTypeUsed = false;
+    private boolean isProductArticleNumberUsed = false;
+    private boolean isSerialNumberUsed = false;
+    private boolean isYearOfConstructionUsed = false;
+    private boolean isDateOfManufacturerUsed = false;
+    private boolean isHardwareVersionUsed = false;
+    private boolean isFirmwareVersionUsed = false;
+    private boolean isSoftwareVersionUsed = false;
+    private boolean isCountryOfOrigin = false;
+    private boolean isUniqueFacilityIdentifierUsed = false;
+    private boolean isCompanyLogoUsed = false;
+
     //template elements
     public SubmodelElementCollection templateMarking;
 
