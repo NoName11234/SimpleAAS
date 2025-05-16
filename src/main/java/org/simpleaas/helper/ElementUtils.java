@@ -60,29 +60,6 @@ public class ElementUtils {
                 .findAny().orElse(new HashMap<>());
     }
 
-    public static HashMap<String, String> convertMlp(MultiLanguageProperty mlp) {
-        HashMap<String, String> values = new HashMap<>();
-
-        for(LangStringTextType value: mlp.getValue()) {
-            values.put(value.getLanguage(), value.getText());
-        }
-
-        return values;
-    }
-
-    public static List<LangStringTextType> convertHashMap(HashMap<String, String> valueMap) {
-        List<LangStringTextType> valueList = new ArrayList<>();
-
-        for(String key: valueMap.keySet()) {
-            valueList.add(new DefaultLangStringTextType.Builder()
-                            .language(key)
-                            .text(valueMap.get(key))
-                    .build());
-        }
-
-        return valueList;
-    }
-
     public static Optional<SubmodelElementCollection> getSmc(List<SubmodelElement> elements, String semanticId) {
         return elements.stream()
                 .filter(se -> se instanceof SubmodelElementCollection)
@@ -107,6 +84,14 @@ public class ElementUtils {
                 .findAny();
     }
 
+    public static Optional<File> getFile(List<SubmodelElement> elements, String semanticId) {
+        return elements.stream()
+                .filter(se -> se instanceof File)
+                .map(se -> ((File)se))
+                .filter(file -> compareSemanticId(file.getSemanticId(), semanticId))
+                .findAny();
+    }
+
     public static Optional<ReferenceElement> getReferenceElement(List<SubmodelElement> elements, String semanticId) {
         return elements.stream()
                 .filter(se -> se instanceof ReferenceElement)
@@ -123,6 +108,29 @@ public class ElementUtils {
         }
 
         return false;
+    }
+
+    public static HashMap<String, String> convertMlp(MultiLanguageProperty mlp) {
+        HashMap<String, String> values = new HashMap<>();
+
+        for(LangStringTextType value: mlp.getValue()) {
+            values.put(value.getLanguage(), value.getText());
+        }
+
+        return values;
+    }
+
+    public static List<LangStringTextType> convertHashMap(HashMap<String, String> valueMap) {
+        List<LangStringTextType> valueList = new ArrayList<>();
+
+        for(String key: valueMap.keySet()) {
+            valueList.add(new DefaultLangStringTextType.Builder()
+                    .language(key)
+                    .text(valueMap.get(key))
+                    .build());
+        }
+
+        return valueList;
     }
 
     public static Optional<FileModel> getFileModel(List<SubmodelElement> elements, String semanticId) {
