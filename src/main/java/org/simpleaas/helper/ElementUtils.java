@@ -1,7 +1,9 @@
 package org.simpleaas.helper;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.*;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultLangStringTextType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -66,6 +68,19 @@ public class ElementUtils {
         }
 
         return values;
+    }
+
+    public static List<LangStringTextType> convertHashMap(HashMap<String, String> valueMap) {
+        List<LangStringTextType> valueList = new ArrayList<>();
+
+        for(String key: valueMap.keySet()) {
+            valueList.add(new DefaultLangStringTextType.Builder()
+                            .language(key)
+                            .text(valueMap.get(key))
+                    .build());
+        }
+
+        return valueList;
     }
 
     public static Optional<SubmodelElementCollection> getSmc(List<SubmodelElement> elements, String semanticId) {
