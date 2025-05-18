@@ -360,6 +360,51 @@ public class NameplateBuilder3_0 {
     }
 
     private void mapGuidelineSpecificPropertiesOnSmc(GuidelineSpecificProperties guidelineSpecificProperties, SubmodelElementCollection guidelineSpecificPropertiesSmc) {
+        //map guideline for conformity declaration
+        Property guidelineConformityDeclarationProp = ElementUtils.getProperty(guidelineSpecificPropertiesSmc.getValue(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.guidelineForConformityDeclaration).get();
+        guidelineConformityDeclarationProp.setValue(guidelineSpecificProperties.getGuidelineForConformityDeclaration());
 
+        //map arbitrary properties
+        Property templateArbitraryProperty = ElementUtils.getProperty(guidelineSpecificPropertiesSmc.getValue(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryProperty).get();
+        SubmodelElementCopier arbitraryPropertyCopier = new SubmodelElementCopier(templateArbitraryProperty);
+        HashMap<String, String> arbitraryPropertyValues = guidelineSpecificProperties.getArbitraryProperties();
+
+        for(String shortId: arbitraryPropertyValues.keySet()) {
+            Property arbitraryProperty = (Property) arbitraryPropertyCopier.createCopy();
+            arbitraryProperty.setIdShort(shortId);
+            arbitraryProperty.setValue(arbitraryPropertyValues.get(shortId));
+            guidelineSpecificPropertiesSmc.getValue().add(arbitraryProperty);
+        }
+
+        guidelineSpecificPropertiesSmc.getValue().remove(templateArbitraryProperty);
+
+        //map arbitrary files
+        File templateArbitraryFile = ElementUtils.getFile(guidelineSpecificPropertiesSmc.getValue(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryFile).get();
+        SubmodelElementCopier arbitraryFileCopier = new SubmodelElementCopier(templateArbitraryFile);
+        HashMap<String, FileModel> arbitraryFileValues = guidelineSpecificProperties.getArbitraryFiles();
+
+        for(String shortId: arbitraryFileValues.keySet()) {
+            File arbitraryFile = (File) arbitraryFileCopier.createCopy();
+            arbitraryFile.setIdShort(shortId);
+            arbitraryFile.setValue(arbitraryFileValues.get(shortId).getValue());
+            arbitraryFile.setContentType(arbitraryFileValues.get(shortId).getContentType());
+            guidelineSpecificPropertiesSmc.getValue().add(arbitraryFile);
+        }
+
+        guidelineSpecificPropertiesSmc.getValue().remove(templateArbitraryFile);
+
+        //map arbitrary MLPs
+        MultiLanguageProperty templateArbitraryMlp = ElementUtils.getMlp(guidelineSpecificPropertiesSmc.getValue(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryMlp).get();
+        SubmodelElementCopier arbitraryMlpCopier = new SubmodelElementCopier(templateArbitraryMlp);
+        HashMap<String, HashMap<String, String>> arbitraryMlpValues = guidelineSpecificProperties.getArbitraryMlps();
+
+        for(String shortId: arbitraryMlpValues.keySet()) {
+            MultiLanguageProperty arbitraryMlp = (MultiLanguageProperty) arbitraryMlpCopier.createCopy();
+            arbitraryMlp.setIdShort(shortId);
+            arbitraryMlp.setValue(ElementUtils.convertHashMap(arbitraryMlpValues.get(shortId)));
+            guidelineSpecificPropertiesSmc.getValue().add(arbitraryMlp);
+        }
+
+        guidelineSpecificPropertiesSmc.getValue().remove(templateArbitraryMlp);
     }
 }
