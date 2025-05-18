@@ -5,8 +5,8 @@ import org.simpleaas.contactinformation.contactinformation1_0.ContactInformation
 import org.simpleaas.contactinformation.contactinformation1_0.ContactInformationReader1_0;
 import org.simpleaas.helper.FileModel;
 import org.simpleaas.nameplate.NameplateConstants;
-import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.AssetSpecificPropertyCollection;
-import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.GuidelineSpecificPropertyCollection;
+import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.AssetSpecificProperties;
+import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.GuidelineSpecificProperties;
 import org.simpleaas.nameplate.nameplate3_0.marking.Marking;
 
 import java.util.HashMap;
@@ -116,9 +116,9 @@ public class NameplateReader3_0 {
         return markings;
     }
 
-    public AssetSpecificPropertyCollection getAssetSpecificProperties() {
+    public AssetSpecificProperties getAssetSpecificProperties() {
         Optional<SubmodelElementCollection> optAssetSpecificPropSmc = getSmc(this.submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.id);
-        AssetSpecificPropertyCollection assetSpecificPropertyCollection = new AssetSpecificPropertyCollection();
+        AssetSpecificProperties assetSpecificPropertyCollection = new AssetSpecificProperties();
 
         if(optAssetSpecificPropSmc.isEmpty()) {
             return assetSpecificPropertyCollection;
@@ -153,32 +153,32 @@ public class NameplateReader3_0 {
         return assetSpecificPropertyCollection;
     }
 
-    private GuidelineSpecificPropertyCollection mapGuidelineSpecificProperty(SubmodelElementCollection guidelineSpecificPropertySmc) {
+    private GuidelineSpecificProperties mapGuidelineSpecificProperty(SubmodelElementCollection guidelineSpecificPropertySmc) {
         Property guidelineForConformityDeclaration = guidelineSpecificPropertySmc.getValue().stream()
                 .filter(se -> se instanceof Property)
                 .map(se -> ((Property)se))
                 .filter(p -> compareSemanticId(p.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.guidelineForConformityDeclaration))
                 .findAny().get();
 
-        GuidelineSpecificPropertyCollection guidelineSpecificPropertyCollection = new GuidelineSpecificPropertyCollection(guidelineForConformityDeclaration.getValue());
+        GuidelineSpecificProperties guidelineSpecificProperties = new GuidelineSpecificProperties(guidelineForConformityDeclaration.getValue());
 
         for (SubmodelElement submodelElement: guidelineSpecificPropertySmc.getValue()) {
             if(submodelElement instanceof Property property) {
                 if(compareSemanticId(property.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryProperty)) {
-                    guidelineSpecificPropertyCollection.addArbitraryProperty(property.getIdShort(), property.getValue());
+                    guidelineSpecificProperties.addArbitraryProperty(property.getIdShort(), property.getValue());
                 }
             } else if(submodelElement instanceof MultiLanguageProperty mlp) {
                 if(compareSemanticId(mlp.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryMlp)) {
-                    guidelineSpecificPropertyCollection.addArbitraryMlp(mlp.getIdShort(), convertMlp(mlp));
+                    guidelineSpecificProperties.addArbitraryMlp(mlp.getIdShort(), convertMlp(mlp));
                 }
             } else if(submodelElement instanceof File file) {
                 if(compareSemanticId(file.getSemanticId(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.GuidelineSpecificProperty.arbitraryFile)) {
-                    guidelineSpecificPropertyCollection.addArbitraryFile(file.getIdShort(), new FileModel(file.getValue(), file.getContentType()));
+                    guidelineSpecificProperties.addArbitraryFile(file.getIdShort(), new FileModel(file.getValue(), file.getContentType()));
                 }
             }
         }
 
-        return guidelineSpecificPropertyCollection;
+        return guidelineSpecificProperties;
     }
 
     private Marking mapMarking(SubmodelElementCollection markingSmc) {

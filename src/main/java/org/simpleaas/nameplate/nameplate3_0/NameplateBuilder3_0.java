@@ -8,6 +8,8 @@ import org.simpleaas.helper.FileModel;
 import org.simpleaas.helper.copying.SubmodelCopier;
 import org.simpleaas.helper.copying.SubmodelElementCopier;
 import org.simpleaas.nameplate.NameplateConstants;
+import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.AssetSpecificProperties;
+import org.simpleaas.nameplate.nameplate3_0.assetspecificproperty.GuidelineSpecificProperties;
 import org.simpleaas.nameplate.nameplate3_0.marking.Marking;
 
 import java.util.HashMap;
@@ -31,9 +33,14 @@ public class NameplateBuilder3_0 {
     private boolean isUniqueFacilityIdentifierUsed = false;
     private boolean isCompanyLogoUsed = false;
     private boolean areMarkingsSet = false;
+    private boolean areAssetSpecificPropertiesSet = false;
 
-    //template elements
-    public SubmodelElementCollection templateMarking;
+    //template marking elements
+    private SubmodelElementCollection templateMarking;
+
+    //template asset specific properties
+    private SubmodelElementCollection templateAssetSpecificProperties;
+
 
     public NameplateBuilder3_0(Submodel template, Submodel contactInformationTemplateSubmodel) {
         //prepare template submodel
@@ -59,9 +66,14 @@ public class NameplateBuilder3_0 {
     }
 
     private void initializeTemplateElements() {
+        //mark template marking element
         SubmodelElementList markingsSml = ElementUtils.getSml(this.template.getSubmodelElements(), NameplateConstants.Nameplate3_0.Markings.id).get();
         this.templateMarking = (SubmodelElementCollection) markingsSml.getValue().get(0);
         this.templateMarking.setIdShort("template-to-be-removed");
+
+        //get asset specific property submodel element collection
+        SubmodelElementCollection assetSpecificPropertiesSmc = ElementUtils.getSmc(this.template.getSubmodelElements(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.id).get();
+        this.templateAssetSpecificProperties = assetSpecificPropertiesSmc;
     }
 
     private void removeTemplateElements(Submodel submodel) {
@@ -76,6 +88,11 @@ public class NameplateBuilder3_0 {
             }
         } else {
             this.template.getSubmodelElements().remove(markingsSml);
+        }
+
+        if(!areAssetSpecificPropertiesSet) {
+            SubmodelElementCollection assetSpecificPropertiesSmc = ElementUtils.getSmc(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.id).get();
+            submodel.getSubmodelElements().remove(assetSpecificPropertiesSmc);
         }
 
     }
@@ -214,13 +231,86 @@ public class NameplateBuilder3_0 {
 
         //map marking
         mapMarkingOnSmc(marking, markingSmc);
+
+        return this;
     }
 
-    public NameplateBuilder3_0 addAssetSpecificProperty(AssetSpecificProperty assetSpecificProperty) {
+    public NameplateBuilder3_0 addAssetSpecificProperty(AssetSpecificProperties assetSpecificProperties) {
+        areAssetSpecificPropertiesSet = true;
 
+        //copy asset specific properties template
+        SubmodelElementCopier assetSpecificPropertiesCopier = new SubmodelElementCopier(this.templateAssetSpecificProperties);
+        SubmodelElementCollection assetSpecificPropertiesSmc = (SubmodelElementCollection) assetSpecificPropertiesCopier.createCopy();
+
+        //map arbitrary properties
+        Property templateArbitraryProperty = ElementUtils.getProperty(assetSpecificPropertiesSmc.getValue(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryProperty).get();
+        SubmodelElementCopier arbitraryPropertyCopier = new SubmodelElementCopier(templateArbitraryProperty);
+
+        HashMap<String, String> arbitraryPropertyValues = assetSpecificProperties.getArbitraryProperties();
+
+        for(String shortId: arbitraryPropertyValues.keySet()) {
+            Property arbitraryProperty = (Property) arbitraryPropertyCopier.createCopy();
+            arbitraryProperty.setIdShort(shortId);
+            arbitraryProperty.setValue(arbitraryPropertyValues.get(shortId));
+            assetSpecificPropertiesSmc.getValue().add(arbitraryProperty);
+        }
+
+        assetSpecificPropertiesSmc.getValue().remove(templateArbitraryProperty);
+
+        //map arbitrary mlps
+        MultiLanguageProperty templateArbitraryMlp = ElementUtils.getMlp(assetSpecificPropertiesSmc.getValue(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryMlp).get();
+        SubmodelElementCopier arbitraryMlpCopier = new SubmodelElementCopier(templateArbitraryMlp);
+
+        HashMap<String, HashMap<String, String>> arbitraryMlpValues = assetSpecificProperties.getArbitraryMlps();
+
+        for(String shortId: arbitraryMlpValues.keySet()) {
+            MultiLanguageProperty arbitraryMlp = (MultiLanguageProperty) arbitraryMlpCopier.createCopy();
+            arbitraryMlp.setIdShort(shortId);
+            arbitraryMlp.setValue(ElementUtils.convertHashMap(arbitraryMlpValues.get(shortId)));
+            assetSpecificPropertiesSmc.getValue().add(arbitraryMlp);
+        }
+
+        assetSpecificPropertiesSmc.getValue().remove(templateArbitraryMlp);
+
+        //map arbitrary files
+        File templateArbitraryFile = ElementUtils.getFile(assetSpecificPropertiesSmc.getValue(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.arbitraryFile).get();
+        SubmodelElementCopier arbitraryFileCopier = new SubmodelElementCopier(templateArbitraryFile);
+
+        HashMap<String, FileModel> arbitraryFileValues = assetSpecificProperties.getArbitraryFiles();
+
+        for(String shortId: arbitraryFileValues.keySet()) {
+            File arbitraryFile = (File) arbitraryFileCopier.createCopy();
+            arbitraryFile.setIdShort(shortId);
+            arbitraryFile.setValue(arbitraryFileValues.get(shortId).getValue());
+            arbitraryFile.setContentType(arbitraryFileValues.get(shortId).getContentType());
+            assetSpecificPropertiesSmc.getValue().add(arbitraryFile);
+        }
+
+        assetSpecificPropertiesSmc.getValue().remove(templateArbitraryFile);
+
+        //map guideline specific properties
+        SubmodelElementList guidelineSpecificPropertiesSml = ElementUtils.getSml(assetSpecificPropertiesSmc.getValue(), NameplateConstants.Nameplate3_0.AssetSpecificProperties.GuidelineSpecificProperties.id).get();
+        SubmodelElementCollection templateGuidelineSpecificPropertiesSmc = (SubmodelElementCollection) guidelineSpecificPropertiesSml.getValue().get(0);
+        SubmodelElementCopier guidelineSpecificPropertiesCopier = new SubmodelElementCopier(templateGuidelineSpecificPropertiesSmc);
+        HashMap<String, GuidelineSpecificProperties> guidelineSpecificPropertiesValues = assetSpecificProperties.getGuidelineSpecificProperties();
+
+        for(String shortId: guidelineSpecificPropertiesValues.keySet()) {
+            SubmodelElementCollection guidelineSpecificPropertiesSmc = (SubmodelElementCollection) guidelineSpecificPropertiesCopier.createCopy();
+            guidelineSpecificPropertiesSmc.setIdShort(shortId);
+            mapGuidelineSpecificPropertiesOnSmc(guidelineSpecificPropertiesValues.get(shortId), guidelineSpecificPropertiesSmc);
+            guidelineSpecificPropertiesSml.getValue().add(guidelineSpecificPropertiesSmc);
+        }
+
+        guidelineSpecificPropertiesSml.getValue().remove(templateGuidelineSpecificPropertiesSmc);
+
+        return this;
     }
 
     private void mapMarkingOnSmc(Marking marking, SubmodelElementCollection markingSmc) {
+
+    }
+
+    private void mapGuidelineSpecificPropertiesOnSmc(GuidelineSpecificProperties guidelineSpecificProperties, SubmodelElementCollection guidelineSpecificPropertiesSmc) {
 
     }
 }

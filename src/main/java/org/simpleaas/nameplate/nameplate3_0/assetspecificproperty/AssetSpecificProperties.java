@@ -7,13 +7,13 @@ import java.util.HashMap;
 /**
  * Represents an asset specific property.
  */
-public class AssetSpecificPropertyCollection {
+public class AssetSpecificProperties {
     private final HashMap<String, String> arbitraryProperties = new HashMap<>();
     private final HashMap<String, HashMap<String, String>> arbitraryMlps = new HashMap<>();
     private final HashMap<String, FileModel> arbitraryFiles = new HashMap<>();
-    private final HashMap<String, GuidelineSpecificPropertyCollection> guidelineSpecificProperties = new HashMap<>();
+    private final HashMap<String, GuidelineSpecificProperties> guidelineSpecificProperties = new HashMap<>();
 
-    public AssetSpecificPropertyCollection addArbitraryProperty(String shortId, String value) {
+    public AssetSpecificProperties addArbitraryProperty(String shortId, String value) {
         this.arbitraryProperties.put(shortId, value);
         return this;
     }
@@ -26,7 +26,7 @@ public class AssetSpecificPropertyCollection {
         return !this.arbitraryProperties.isEmpty();
     }
 
-    public AssetSpecificPropertyCollection addArbitraryMlp(String shortId, HashMap<String, String> values) {
+    public AssetSpecificProperties addArbitraryMlp(String shortId, HashMap<String, String> values) {
         this.arbitraryMlps.put(shortId, values);
         return this;
     }
@@ -39,7 +39,7 @@ public class AssetSpecificPropertyCollection {
         return !this.arbitraryMlps.isEmpty();
     }
 
-    public AssetSpecificPropertyCollection addArbitraryFile(String shortId, FileModel file) {
+    public AssetSpecificProperties addArbitraryFile(String shortId, FileModel file) {
         this.arbitraryFiles.put(shortId, file);
         return this;
     }
@@ -52,12 +52,12 @@ public class AssetSpecificPropertyCollection {
         return !this.arbitraryFiles.isEmpty();
     }
 
-    public AssetSpecificPropertyCollection addGuidelineSpecificProperty(String shortId, GuidelineSpecificPropertyCollection guidelineSpecificPropertyCollection) {
-        this.guidelineSpecificProperties.put(shortId, guidelineSpecificPropertyCollection);
+    public AssetSpecificProperties addGuidelineSpecificProperty(String shortId, GuidelineSpecificProperties guidelineSpecificProperties) {
+        this.guidelineSpecificProperties.put(shortId, guidelineSpecificProperties);
         return this;
     }
 
-    public HashMap<String, GuidelineSpecificPropertyCollection> getGuidelineSpecificProperties() {
+    public HashMap<String, GuidelineSpecificProperties> getGuidelineSpecificProperties() {
         return this.guidelineSpecificProperties;
     }
 

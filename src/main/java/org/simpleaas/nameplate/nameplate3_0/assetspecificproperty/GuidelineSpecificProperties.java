@@ -7,13 +7,13 @@ import java.util.HashMap;
 /**
  * Represents a guideline specific property.
  */
-public class GuidelineSpecificPropertyCollection {
+public class GuidelineSpecificProperties {
     private final String guidelineForConformityDeclaration;
     private final HashMap<String, String> arbitraryProperties = new HashMap<>();
     private final HashMap<String, FileModel> arbitraryFiles = new HashMap<>();
     private final HashMap<String, HashMap<String, String>> arbitraryMlps = new HashMap<>();
 
-    public GuidelineSpecificPropertyCollection(String guidelineForConformityDeclaration) {
+    public GuidelineSpecificProperties(String guidelineForConformityDeclaration) {
         this.guidelineForConformityDeclaration = guidelineForConformityDeclaration;
     }
 
@@ -21,7 +21,7 @@ public class GuidelineSpecificPropertyCollection {
         return this.guidelineForConformityDeclaration;
     }
 
-    public GuidelineSpecificPropertyCollection addArbitraryProperty(String shortId, String value) {
+    public GuidelineSpecificProperties addArbitraryProperty(String shortId, String value) {
         this.arbitraryProperties.put(shortId, value);
         return this;
     }
@@ -34,7 +34,7 @@ public class GuidelineSpecificPropertyCollection {
         return !this.arbitraryProperties.isEmpty();
     }
 
-    public GuidelineSpecificPropertyCollection addArbitraryFile(String shortId, FileModel file) {
+    public GuidelineSpecificProperties addArbitraryFile(String shortId, FileModel file) {
         this.arbitraryFiles.put(shortId, file);
         return this;
     }
@@ -47,7 +47,7 @@ public class GuidelineSpecificPropertyCollection {
         return !this.arbitraryFiles.isEmpty();
     }
 
-    public GuidelineSpecificPropertyCollection addArbitraryMlp(String shortId, HashMap<String, String> values) {
+    public GuidelineSpecificProperties addArbitraryMlp(String shortId, HashMap<String, String> values) {
         this.arbitraryMlps.put(shortId, values);
         return this;
     }
