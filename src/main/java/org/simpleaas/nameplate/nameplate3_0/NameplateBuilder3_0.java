@@ -15,8 +15,8 @@ import org.simpleaas.nameplate.nameplate3_0.marking.Marking;
 import java.util.HashMap;
 
 public class NameplateBuilder3_0 {
-    private Submodel template;
-    private Submodel contactInformationTemplateSubmodel;
+    private final Submodel template;
+    private final Submodel contactInformationTemplateSubmodel;
 
     //flags
     private boolean isProductRootUsed = false;
