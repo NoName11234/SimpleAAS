@@ -307,7 +307,56 @@ public class NameplateBuilder3_0 {
     }
 
     private void mapMarkingOnSmc(Marking marking, SubmodelElementCollection markingSmc) {
+        //map marking name
+        Property markingNameProperty = ElementUtils.getProperty(markingSmc.getValue(), NameplateConstants.Nameplate3_0.Markings.Marking.markingName).get();
+        markingNameProperty.setValue(marking.getMarkingName());
 
+        //map designation of certificate or approval
+        Property designationOfCertificateOrApprovalProperty = ElementUtils.getProperty(markingSmc.getValue(), NameplateConstants.Nameplate3_0.Markings.Marking.designationOfCertificateOrApproval).get();
+
+        if(marking.getDesignation().isPresent()) {
+            designationOfCertificateOrApprovalProperty.setValue(marking.getDesignation().get());
+        } else {
+            markingSmc.getValue().remove(designationOfCertificateOrApprovalProperty);
+        }
+
+        //map issue date
+        Property issueDateProperty = ElementUtils.getProperty(markingSmc.getValue(), NameplateConstants.Nameplate3_0.Markings.Marking.issueDate).get();
+
+        if(marking.getIssueDate().isPresent()) {
+            issueDateProperty.setValue(marking.getIssueDate().get());
+        } else {
+            markingSmc.getValue().remove(issueDateProperty);
+        }
+
+        //map expiry date
+        Property expiryDateProperty = ElementUtils.getProperty(markingSmc.getValue(), NameplateConstants.Nameplate3_0.Markings.Marking.expiryDate).get();
+
+        if (marking.getExpiryDate().isPresent()) {
+            expiryDateProperty.setValue(marking.getExpiryDate().get());
+        } else {
+            markingSmc.getValue().remove(expiryDateProperty);
+        }
+
+        //map marking file
+        File markingFile = ElementUtils.getFile(markingSmc.getValue(), NameplateConstants.Nameplate3_0.Markings.Marking.markingFile).get();
+        FileModel markingFileModel = marking.getMarkingFile();
+        markingFile.setValue(markingFileModel.getValue());
+        markingFile.setContentType(markingFileModel.getContentType());
+
+        //map marking additional texts
+        Property templateMarkingAdditionalTextProperty = ElementUtils.getProperty(markingSmc.getValue(), NameplateConstants.Nameplate3_0.Markings.Marking.markingAdditionalText).get();
+        SubmodelElementCopier markingAdditionalTextCopier = new SubmodelElementCopier(templateMarkingAdditionalTextProperty);
+        HashMap<String, String> markingAdditionalTextsValues = marking.getMarkingAdditionalTexts();
+
+        for(String shortId: markingAdditionalTextsValues.keySet()) {
+            Property markingAdditionalText = (Property) markingAdditionalTextCopier.createCopy();
+            markingAdditionalText.setIdShort(shortId);
+            markingAdditionalText.setValue(markingAdditionalTextsValues.get(shortId));
+            markingSmc.getValue().add(markingAdditionalText);
+        }
+
+        markingSmc.getValue().remove(templateMarkingAdditionalTextProperty);
     }
 
     private void mapGuidelineSpecificPropertiesOnSmc(GuidelineSpecificProperties guidelineSpecificProperties, SubmodelElementCollection guidelineSpecificPropertiesSmc) {
