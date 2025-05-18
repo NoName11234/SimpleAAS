@@ -77,6 +77,85 @@ public class NameplateBuilder3_0 {
     }
 
     private void removeTemplateElements(Submodel submodel) {
+        //remove property product root if not used
+        if(!isProductRootUsed) {
+            Property productRootProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.manufacturerProductRoot).get();
+            submodel.getSubmodelElements().remove(productRootProp);
+        }
+
+        //remove property product family if not used
+        if(!isProductFamilyUsed) {
+            Property productFamilyProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.manufacturerProductFamily).get();
+            submodel.getSubmodelElements().remove(productFamilyProp);
+        }
+
+        //remove property product type if not used
+        if(!isProductTypeUsed) {
+            Property productTypeProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.manufacturerProductType).get();
+            submodel.getSubmodelElements().remove(productTypeProp);
+        }
+
+        //remove property product article number if not used
+        if(!isProductArticleNumberUsed) {
+            Property productArticleNumberProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.productArticleNumberOfManufacturer).get();
+            submodel.getSubmodelElements().remove(productArticleNumberProp);
+        }
+
+        //remove property serial number if not used
+        if(!isSerialNumberUsed) {
+            Property serialNumberProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.serialNumber).get();
+            submodel.getSubmodelElements().remove(serialNumberProp);
+        }
+
+        //remove property year of construction if not used
+        if(!isYearOfConstructionUsed) {
+            Property yearOfConstructionProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.yearOfConstruction).get();
+            submodel.getSubmodelElements().remove(yearOfConstructionProp);
+        }
+
+        //remove property date of manufacture if not used
+        if(!isDateOfManufacturerUsed) {
+            Property dateOfManufactureProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.dateOfManufacture).get();
+            submodel.getSubmodelElements().remove(dateOfManufactureProp);
+        }
+
+        //remove property hardware version if not used
+        if(!isHardwareVersionUsed) {
+            Property hardwareVersionProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.hardwareVersion).get();
+            submodel.getSubmodelElements().remove(hardwareVersionProp);
+        }
+
+        //remove property firmware version if not used
+        if(!isFirmwareVersionUsed) {
+            Property firmwareVersionProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.firmwareVersion).get();
+            submodel.getSubmodelElements().remove(firmwareVersionProp);
+        }
+
+        //remove property software version if not used
+        if(!isSoftwareVersionUsed) {
+            Property softwareVersionProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.softwareVersion).get();
+            submodel.getSubmodelElements().remove(softwareVersionProp);
+        }
+
+        //remove property country of origin if not used
+        if(!isCountryOfOrigin) {
+            Property countryOfOriginProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.countryOfOrigin).get();
+            submodel.getSubmodelElements().remove(countryOfOriginProp);
+        }
+
+        //remove property unique facility identifier if not used
+        if(!isUniqueFacilityIdentifierUsed) {
+            Property uniqueFacilityIdentifierProp = ElementUtils.getProperty(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.uniqueFacilityIdentifier).get();
+            submodel.getSubmodelElements().remove(uniqueFacilityIdentifierProp);
+        }
+
+        //remove file company logo if not used
+        if(!isCompanyLogoUsed) {
+            File companyLogoFile = ElementUtils.getFile(submodel.getSubmodelElements(), NameplateConstants.Nameplate3_0.companyLogo).get();
+            submodel.getSubmodelElements().remove(companyLogoFile);
+        }
+
+        //check markings
         SubmodelElementList markingsSml = ElementUtils.getSml(this.template.getSubmodelElements(), NameplateConstants.Nameplate3_0.Markings.id).get();
 
         //if there are no markings remove markings list, else remove template marking
