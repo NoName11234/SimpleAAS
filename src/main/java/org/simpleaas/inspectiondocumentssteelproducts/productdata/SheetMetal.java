@@ -1,4 +1,41 @@
 package org.simpleaas.inspectiondocumentssteelproducts.productdata;
 
+import java.util.HashMap;
+
 public class SheetMetal {
+    private final String thickness;
+    private final String width;
+    private final String length;
+    private final HashMap<String, String> standardReferences = new HashMap<>();
+
+    public SheetMetal(String thickness, String width, String length) {
+        this.thickness = thickness;
+        this.width = width;
+        this.length = length;
+    }
+
+    public String getThickness() {
+        return thickness;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public SheetMetal addStandardReference(String shortId, String value) {
+        this.standardReferences.put(shortId, value);
+        return this;
+    }
+
+    public HashMap<String, String> getStandardReferences() {
+        return this.standardReferences;
+    }
+
+    public boolean areStandardReferencesPresent() {
+        return !this.standardReferences.isEmpty();
+    }
 }
