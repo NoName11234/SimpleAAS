@@ -1,5 +1,7 @@
 package org.simpleaas.inspectiondocumentssteelproducts;
 
+import java.util.Optional;
+
 public class OrderData {
     private final String typeOfInspectionDocument;
     private final String orderDate;
@@ -25,8 +27,8 @@ public class OrderData {
         return this;
     }
 
-    public String getManufacturerOrderNumber() {
-        return this.manufacturerOrderNumber;
+    public Optional<String> getManufacturerOrderNumber() {
+        return Optional.ofNullable(this.manufacturerOrderNumber);
     }
 
     public OrderData setPurchaseOrderNumber(String purchaseOrderNumber) {
@@ -34,8 +36,8 @@ public class OrderData {
         return this;
     }
 
-    public String getPurchaseOrderNumber() {
-        return this.purchaseOrderNumber;
+    public Optional<String> getPurchaseOrderNumber() {
+        return Optional.ofNullable(this.purchaseOrderNumber);
     }
 
     public OrderData setDeliveryNoteNumber(String deliveryNoteNumber) {
@@ -43,7 +45,7 @@ public class OrderData {
         return this;
     }
 
-    public String getDeliveryNoteNumber() {
-        return this.deliveryNoteNumber;
+    public Optional<String> getDeliveryNoteNumber() {
+        return Optional.ofNullable(this.deliveryNoteNumber);
     }
 }
