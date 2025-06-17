@@ -1,6 +1,7 @@
 package org.simpleaas.inspectiondocumentssteelproducts.mechanicaltest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 public class TensileTest {
@@ -13,8 +14,8 @@ public class TensileTest {
     private final HashMap<String, String> elongationAfterFractureIndividualValues = new HashMap<>();
     private String testTemperature = null;
     private final HashMap<String, String> sampleShape = new HashMap<>();
-    private final HashMap<String, HashMap<String, String>> locationOfSamples = new HashMap<>();
-    private final HashMap<String, HashMap<String, String>> directionOfSamples = new HashMap<>();
+    private final List<LocationOfSample> locationOfSamples = new java.util.ArrayList<>();
+    private final List<DirectionOfSample> directionOfSamples = new java.util.ArrayList<>();
 
     public TensileTest(String shortId) {
         this.shortId = shortId;
@@ -108,25 +109,24 @@ public class TensileTest {
         return this.sampleShape;
     }
 
-    public TensileTest addLocationOfSample(String shortId, HashMap<String, String> locationOfSample) {
-        this.locationOfSamples.put(shortId, locationOfSample);
+    public TensileTest addLocationOfSample(LocationOfSample locationOfSample) {
+        this.locationOfSamples.add(locationOfSample);
         return this;
     }
 
-    public HashMap<String, HashMap<String, String>> getLocationOfSamples() {
+    public List<LocationOfSample> getLocationOfSamples() {
         return this.locationOfSamples;
     }
 
     public boolean areLocationOfSamplesPresent() {
         return !this.locationOfSamples.isEmpty();
     }
-
-    public TensileTest addDirectionOfSample(String shortId, HashMap<String, String> directionOfSample) {
-        this.directionOfSamples.put(shortId, directionOfSample);
+    public TensileTest addDirectionOfSample(DirectionOfSample directionOfSample) {
+        this.directionOfSamples.add(directionOfSample);
         return this;
     }
 
-    public HashMap<String, HashMap<String, String>> getDirectionOfSamples() {
+    public List<DirectionOfSample> getDirectionOfSamples() {
         return this.directionOfSamples;
     }
 
