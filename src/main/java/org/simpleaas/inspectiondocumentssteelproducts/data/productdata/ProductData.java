@@ -1,6 +1,5 @@
-package org.simpleaas.inspectiondocumentssteelproducts.productdata;
+package org.simpleaas.inspectiondocumentssteelproducts.data.productdata;
 
-import org.eclipse.digitaltwin.aas4j.v3.model.Blob;
 import org.simpleaas.helper.BlobModel;
 
 import java.util.HashMap;

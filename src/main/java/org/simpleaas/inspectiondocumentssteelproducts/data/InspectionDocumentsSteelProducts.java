@@ -1,4 +1,4 @@
-package org.simpleaas.inspectiondocumentssteelproducts;
+package org.simpleaas.inspectiondocumentssteelproducts.data;
 
 public class InspectionDocumentsSteelProducts {
     public static String id = "https://admin-shell.io/idta/SubmodelTemplate/InspectionDocumentsOfSteelProducts/1/0";

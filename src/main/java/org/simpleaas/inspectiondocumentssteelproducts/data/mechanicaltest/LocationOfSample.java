@@ -1,4 +1,4 @@
-package org.simpleaas.inspectiondocumentssteelproducts.mechanicaltest;
+package org.simpleaas.inspectiondocumentssteelproducts.data.mechanicaltest;
 
 import java.util.HashMap;
 

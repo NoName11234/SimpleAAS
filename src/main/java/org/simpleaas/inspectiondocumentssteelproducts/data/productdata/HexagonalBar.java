@@ -1,4 +1,4 @@
-package org.simpleaas.inspectiondocumentssteelproducts.productdata;
+package org.simpleaas.inspectiondocumentssteelproducts.data.productdata;
 
 import java.util.HashMap;
 

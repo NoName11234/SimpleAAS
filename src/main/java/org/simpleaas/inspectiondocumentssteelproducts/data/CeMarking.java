@@ -1,4 +1,4 @@
-package org.simpleaas.inspectiondocumentssteelproducts;
+package org.simpleaas.inspectiondocumentssteelproducts.data;
 
 import org.simpleaas.helper.FileModel;
 

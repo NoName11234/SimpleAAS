@@ -1,25 +1,32 @@
-package org.simpleaas.inspectiondocumentssteelproducts.productdata;
+package org.simpleaas.inspectiondocumentssteelproducts.data.productdata;
 
 import java.util.HashMap;
 
-public class RoundBar {
-    private final String outerDiameter;
+public class RectangularBar {
+    private final String height;
+    private final String width;
     private final String length;
     private final HashMap<String, String> standardReferences = new HashMap<>();
 
-    public RoundBar(String outerDiameter, String length) {
-        this.outerDiameter = outerDiameter;
+    public RectangularBar(String height, String width, String length) {
+        this.height = height;
+        this.width = width;
         this.length = length;
     }
 
-    public String getOuterDiameter() {
-        return outerDiameter;
+    public String getHeight() {
+        return height;
     }
+
+    public String getWidth() {
+        return width;
+    }
+
     public String getLength() {
         return length;
     }
 
-    public RoundBar addStandardReference(String shortId, String value) {
+    public RectangularBar addStandardReference(String shortId, String value) {
         this.standardReferences.put(shortId, value);
         return this;
     }

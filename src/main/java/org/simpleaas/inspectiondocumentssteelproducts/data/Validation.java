@@ -1,4 +1,4 @@
-package org.simpleaas.inspectiondocumentssteelproducts;
+package org.simpleaas.inspectiondocumentssteelproducts.data;
 
 import java.util.ArrayList;
 import java.util.List;

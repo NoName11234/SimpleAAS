@@ -1,10 +1,10 @@
-package org.simpleaas.inspectiondocumentssteelproducts.mechanicaltest;
+package org.simpleaas.inspectiondocumentssteelproducts.data.mechanicaltest;
 
-public class NotchImpactStrengthIndividualValue {
+public class NotchImpactWorkIndividualValue {
     private final String shortId;
     private final String individualValue;
 
-    public NotchImpactStrengthIndividualValue(String shortId, String individualValue) {
+    public NotchImpactWorkIndividualValue(String shortId, String individualValue) {
         this.shortId = shortId;
         this.individualValue = individualValue;
     }
